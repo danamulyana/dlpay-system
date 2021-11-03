@@ -1,0 +1,21 @@
+html {
+    background: radial-gradient(85.05% 169.19% at 8.92% 11.28%, #1C3FAA 0%, #1C3FAA 49.47%, #3BB9A1 67.37%, #34AA85 100%);
+    &.dark {
+        @apply bg-dark-2;
+        body {
+            @apply text-gray-300;
+            *,
+            ::before,
+            ::after {
+                @apply border-dark-3;
+            }
+        }
+    }
+    body {
+        -webkit-font-smoothing: antialiased;
+        @apply overflow-x-hidden py-3 px-8 font-roboto text-sm text-gray-800;
+        @include media-breakpoint-down(sm) {
+            @apply px-3;
+        }
+    }
+}

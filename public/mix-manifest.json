@@ -1,0 +1,15 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/dist/js/ckeditor-classic.js": "/dist/js/ckeditor-classic.js",
+    "/dist/js/ckeditor-inline.js": "/dist/js/ckeditor-inline.js",
+    "/dist/js/ckeditor-balloon.js": "/dist/js/ckeditor-balloon.js",
+    "/dist/js/ckeditor-balloon-block.js": "/dist/js/ckeditor-balloon-block.js",
+    "/dist/js/ckeditor-document.js": "/dist/js/ckeditor-document.js",
+    "/css/app.css": "/css/app.css",
+    "/dist/images/200x200.jpg": "/dist/images/200x200.jpg",
+    "/dist/images/800x800.jpg": "/dist/images/800x800.jpg",
+    "/dist/images/error-illustration.svg": "/dist/images/error-illustration.svg",
+    "/dist/images/illustration.svg": "/dist/images/illustration.svg",
+    "/dist/images/logo.svg": "/dist/images/logo.svg",
+    "/dist/images/phone-illustration.svg": "/dist/images/phone-illustration.svg"
+}
