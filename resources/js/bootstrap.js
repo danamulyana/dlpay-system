@@ -14,3 +14,6 @@ window.cash = cash;
 window.helper = helper;
 window.Velocity = Velocity;
 window.Popper = Popper;
+window.$ = window.jQuery = require('jquery')
+
+import 'select2';

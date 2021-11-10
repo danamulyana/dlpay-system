@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Master;
 
+use App\Models\doorlockDevices;
 use App\Models\mbank;
 use App\Models\mdepartement;
 use App\Models\memployee;
@@ -33,7 +34,7 @@ class Employees extends Component
     public $paymentselect = null;
     public $paymentselecttrue = null;
 
-    public $data, $fingerprint, $bank_name, $bank_account, $credited_accont;
+    public $data , $fingerprint, $bank_name, $bank_account, $credited_accont, $doorView = [], $deviceData = [];
 
     public $view = [];
     public $subview, $depview, $viewtransfer;
@@ -93,6 +94,7 @@ class Employees extends Component
 
         $data = memployee::find($this->id_del);
         $data->delete();
+        $data->Doorlock()->detach();
 
         $this->flash('success','Karyawan Berhasil di Hapus.');
         return redirect()->route('master.employees');
@@ -132,6 +134,8 @@ class Employees extends Component
 
         $data->save();
 
+        $data->Doorlock()->sync($this->deviceData);
+
         $this->flash('success','Karyawan Berhasil di Tambahkan.');
         return redirect()->route('master.employees');
     }
@@ -157,9 +161,16 @@ class Employees extends Component
 
     public function showmodalView($id)
     {
+        $this->emit('select2modal');
         $this->confirmingViewModal = true;
         $data = memployee::find($id);
+        $door = [];
+        foreach ($data->Doorlock as $value) {
+            $door[] = $value->pivot->doorlock_id;
+        }
+        $this->dataView = $data;
         $this->view = $data->toArray();
+        $this->doorView = $door;
         $this->depview = $data->departement_id;
         $this->subview = msubdepartement::where('departement_id',$id)->get();
         $this->viewtransfer = $data->transfer_type;
@@ -202,6 +213,9 @@ class Employees extends Component
 
         $data->save();
 
+        $data->Doorlock()->sync($this->doorView);
+
+
         $this->flash('success','Karyawan Berhasil di Ubah.');
         return redirect()->route('master.employees');
     }
@@ -214,10 +228,12 @@ class Employees extends Component
         ->orderBy($this->sortColumnName, $this->sortDirection)->paginate($this->perPage);
         $departement = mdepartement::all();
         $banks = mbank::all();
+        $devices = doorlockDevices::all(); 
         return view('livewire.master.employees',[
             'employees' => $employees,
             'departement' => $departement,
             'banks' => $banks,
+            'devices' => $devices,
         ]);
     }
 

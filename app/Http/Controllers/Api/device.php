@@ -114,8 +114,11 @@ class device extends BaseController
                             }
                             $isdata = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today())->first();
                             if (!$isdata) {
+                                if ($time->jam_masuk > 10) {
+                                    return 'okeh';
+                                }
                                 $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                                $this->sendAttendance($cek_device->uid,$cekRfid->id,Carbon::now(),'-', 'Tazaka Room : ' . $cek_device->uid);
+                                $this->sendAttendance($cek_device->uid,$cekRfid->id,Carbon::now(),'-','','', 'Tazaka Room : ' . $cek_device->uid);
                                 return $this->sendMessage('success','attendance recorded',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
                             }
                             $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);

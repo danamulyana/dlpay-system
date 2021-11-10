@@ -17,10 +17,12 @@ class CreateCollectAttendancesTable extends Migration
             $table->id();
             $table->string('uid');
             $table->foreignId('user_id')->constrained('memployees')->onDelete('cascade');
-            $table->string('jam_masuk');
+            $table->string('jam_masuk')->nullable();
             $table->string('jam_masuk_photo_path', 2048)->nullable();
             $table->string('jam_Keluar')->nullable();
             $table->string('jam_Keluar_photo_path', 2048)->nullable();
+            $table->string('keterangan_detail')->comment('buat keterangan untuk user/admin');
+            $table->enum('keterangan',['hadir', 'terlambat', 'tidak masuk'])->nullable();
             $table->integer('overtime')->default(0);
             $table->string('createdBy')->nullable();
             $table->string('updatedBy')->nullable();

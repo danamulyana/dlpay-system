@@ -1,4 +1,4 @@
-<x-guest-layout>
+{{-- <x-guest-layout>
     <div class="grid grid-cols-12 gap-6">
         <div class="col-span-12 2xl:col-span-9">
             <div class="grid grid-cols-12 gap-6">
@@ -132,4 +132,13 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</x-guest-layout> --}}
+
+<x-app-layout>
+    hallo
+    <x-select2-multiple id="hello" wire:model="hallo">
+        <option value="1" selected>hallo</option>
+        <option value="2">hallo</option>
+        <option value="1" selected>hallo</option>
+    </x-select2-multiple>
+</x-app-layout>

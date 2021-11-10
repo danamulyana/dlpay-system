@@ -18,6 +18,8 @@ class collectAttendance extends Model
         'jam_masuk',
         'jam_Keluar',
         'overtime',
+        'keterangan_detail',
+        'keterangan',
         'createdBy',
         'updatedBy',
     ];

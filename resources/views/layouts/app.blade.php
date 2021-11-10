@@ -74,8 +74,9 @@
             </div>
             <!-- END: Content -->
         </div>
+        @stack('modals')
         @livewireScripts
-
+        @stack('scripts')
         <x-livewire-alert::scripts />
     </body>
 </html>

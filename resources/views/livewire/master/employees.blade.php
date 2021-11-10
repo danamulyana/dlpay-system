@@ -67,7 +67,7 @@
                 <tbody>
                     @foreach ($employees as $data)
                     <tr class="intro-x" wire:key="{{ $loop->index }}">
-                        <td class="text-center">{{ $loop->index + 1}}</td>
+                        <td class="text-center">{{ $employees->count() * ($employees->currentPage() - 1) + $loop->iteration}}</td>
                         <td class="text-center">{{ $data->nip }}</td>
                         <td class="">{{ $data->nama }}</td>
                         <td class="text-center">{{ $data->job_title }}</td>
@@ -156,7 +156,7 @@
 
                 <div class="mt-5">
                     <x-jet-label for="data.attendance_type" value="{{ __('Kehadiran') }}" />
-                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="data.attendance_type">
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="data.attendance_type">
                         <option value="">--- Select Attendance ---</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -165,7 +165,7 @@
                 </div>
                 <div class="mt-5">
                     <x-jet-label for="departement" value="{{ __('Nama Departement') }}" />
-                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="subdepdropdown">
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="subdepdropdown">
                         <option value="">--- Select data departement ---</option>
                         @foreach ($departement as $data)
                         <option value="{{ $data->id }}">{{ $data->nama }}</option>
@@ -177,7 +177,7 @@
                 @if (!is_null($sub_selection))
                 <div class="mt-5">
                     <x-jet-label for="subdepartement" value="{{ __('Nama Sub Departement') }}" />
-                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="data.subdep">
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="data.subdep">
                         <option value="">--- Select data subdepartement ---</option>
                         @foreach ($sub_selection as $data)
                         <option value="{{ $data->id }}">{{ $data->nama }}</option>
@@ -186,6 +186,26 @@
                     <x-jet-input-error for="departement" class="mt-2" />
                 </div>
                 @endif
+                {{-- hak akses --}}
+                <div class="my-10">
+                    <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
+                        <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Hak Akses</div> 
+                    </div> 
+                </div>
+
+                <div class="mt-5" wire:ignore>
+                    <x-jet-label for="deviceData" value="{{ __('DoorLock Privelage') }}" />
+
+                    <x-select2-multiple id="deviceData" wire:model="deviceData">
+                        @foreach ($devices as $device)
+                        <option value="{{ $device->id }}">{{ $device->uid }} | {{ $device->name }}</option>
+                        @endforeach
+                    </x-select2-multiple>
+                        
+                    <x-jet-input-error for="deviceData" class="mt-2" />
+                </div>
+
+                {{-- END : Hak akses --}}
                 <div class="my-10">
                     <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
                         <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Info Pribadi</div> 
@@ -225,7 +245,7 @@
                 </div>
                 <div class="mt-5">
                     <x-jet-label for="data.payment_mode" value="{{ __('Pembayaran Gaji') }}" />
-                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="data.payment_mode">
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="data.payment_mode">
                         <option value="">--- Select Payment mode ---</option>
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
@@ -245,7 +265,7 @@
                 </div>
                 <div class="mt-5">
                     <x-jet-label for="paymentselect" value="{{ __('Tipe Pembayaran') }}" />
-                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="paymentselect">
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="paymentselect">
                         <option value="">--- Select Payment mode ---</option>
                         <option value="1">Bank</option>
                         <option value="2">Cash</option>
@@ -265,7 +285,7 @@
                 </div>
                 <div class="mt-5">
                     <x-jet-label for="bank_account" value="{{ __('Bank') }}" />
-                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="bank_account">
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="bank_account">
                         <option value="">--- Select Bank ---</option>
                         @foreach ($banks as $bank)
                         <option value="{{ $bank->id }}">{{ $bank->nama_bank . ' | ' . $bank->kode_bank }}</option>
@@ -379,7 +399,7 @@
                 
                                 <div class="mt-5">
                                     <x-jet-label for="view.attendance_type" value="{{ __('Kehadiran') }}" />
-                                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="view.attendance_type">
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="view.attendance_type">
                                         <option value="">--- Select Attendance ---</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -388,7 +408,7 @@
                                 </div>
                                 <div class="mt-5">
                                     <x-jet-label for="departement" value="{{ __('Nama Departement') }}" />
-                                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="depview">
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="depview">
                                         <option value="">--- Select data departement ---</option>
                                         @foreach ($departement as $data)
                                         <option value="{{ $data->id }}">{{ $data->nama }}</option>
@@ -400,7 +420,7 @@
                                 @if (!is_null($subview))
                                 <div class="mt-5">
                                     <x-jet-label for="subdepartement" value="{{ __('Nama Sub Departement') }}" />
-                                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="view.subdepartement_id">
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="view.subdepartement_id">
                                         <option value="">--- Select data subdepartement ---</option>
                                         @foreach ($subview as $data)
                                         <option value="{{ $data->id }}">{{ $data->nama }}</option>
@@ -409,6 +429,28 @@
                                     <x-jet-input-error for="departement" class="mt-2" />
                                 </div>
                                 @endif
+
+                                {{-- hak akses --}}
+                                <div class="my-10">
+                                    <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
+                                        <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Hak Akses</div> 
+                                    </div> 
+                                </div>
+
+                                <div class="mt-5">
+                                    <x-jet-label for="viewDoorlock" value="{{ __('DoorLock Privelage') }}" />
+                                    <div wire:ignore>
+                                        <select id="viewDoorlock" class=" select2" multiple="multiple" style="width: 75%;" wire:model="doorView">
+                                            @foreach ($devices as $device)
+                                            <option value="{{ $device->id }}">{{ $device->uid }} | {{ $device->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <x-jet-input-error for="doorView" class="mt-2" />
+                                </div>
+
+                                {{-- END : Hak akses --}}
+                                
                                 <div class="my-10">
                                     <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
                                         <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Info Pribadi</div> 
@@ -448,7 +490,7 @@
                                 </div>
                                 <div class="mt-5">
                                     <x-jet-label for="view.payment_mode" value="{{ __('Pembayaran Gaji') }}" />
-                                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="view.payment_mode">
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="view.payment_mode">
                                         <option value="">--- Select Payment mode ---</option>
                                         <option value="weekly">Weekly</option>
                                         <option value="monthly">Monthly</option>
@@ -468,7 +510,7 @@
                                 </div>
                                 <div class="mt-5">
                                     <x-jet-label for="paymentselect" value="{{ __('Tipe Pembayaran') }}" />
-                                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="viewtransfer">
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="viewtransfer">
                                         <option value="">--- Select Payment mode ---</option>
                                         <option value="1">Bank</option>
                                         <option value="2">Cash</option>
@@ -488,7 +530,7 @@
                                 </div>
                                 <div class="mt-5">
                                     <x-jet-label for="bank_account" value="{{ __('Bank') }}" />
-                                    <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="view.bank_account">
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="view.bank_account">
                                         <option value="">--- Select Bank ---</option>
                                         @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}">{{ $bank->nama_bank . ' | ' . $bank->kode_bank }}</option>
@@ -554,3 +596,17 @@
         </x-slot>
     </x-jet-dialog-modal>
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:load', () => {
+            $('#viewDoorlock').select2().on('change', function (e) {
+                let data = $(this).val();
+                @this.set('doorView', data);
+            });
+        })
+        Livewire.on('select2modal', () => {
+            $('#viewDoorlock').trigger('change');   //the trigerr data selected into modal
+        }); 
+    </script>
+@endpush

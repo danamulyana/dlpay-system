@@ -56,25 +56,28 @@ class BaseController extends Controller
             'updatedBy' => 'Tazaka Room : ' . $id_room,
         ]);
     }
-    public function sendAttendance($uid, $user_id, $jamMasuk, $jamKeluar, $cb)
+    public function sendAttendance($uid, $user_id, $jamMasuk, $jamKeluar, $keterangan, $record, $cb)
     {
         collectAttendance::create([
             'uid' => $uid,
             'user_id' => $user_id,
             'jam_masuk' => $jamMasuk,
             'jam_keluar' => $jamKeluar,
+            'keterangan' => $keterangan,
+            'keterangan_detail' => $record,
             'createdBy' => $cb,
             'updatedBy' => 'Tazaka Room : ' . $uid,
         ]);
     }
-    public function updateAttendance($id ,$uid, $user_id, $jamMasuk, $jamKeluar, $overtime = 0)
+    public function updateAttendance($id ,$uid, $user_id, $jamMasuk, $jamKeluar,$keterangan, $record)
     {
         $data = collectAttendance::find($id);
         $data->uid = $uid;
         $data->user_id = $user_id;
         $data->jam_masuk = $jamMasuk;
         $data->jam_keluar = $jamKeluar;
-        $data->overtime = $overtime;
+        $data->keterangan = $keterangan;
+        $data->keterangan_detail = $record;
         $data->updatedBy = 'Tazaka Room : ' . $uid;
 
         $data->save();
