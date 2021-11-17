@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Master;
 
 use App\Models\doorlockDevices;
+use App\Models\Golongan;
 use App\Models\mbank;
 use App\Models\mdepartement;
 use App\Models\memployee;
@@ -228,12 +229,14 @@ class Employees extends Component
         ->orderBy($this->sortColumnName, $this->sortDirection)->paginate($this->perPage);
         $departement = mdepartement::all();
         $banks = mbank::all();
-        $devices = doorlockDevices::all(); 
+        $devices = doorlockDevices::all();
+        $Golongan = Golongan::all();
         return view('livewire.master.employees',[
             'employees' => $employees,
             'departement' => $departement,
             'banks' => $banks,
             'devices' => $devices,
+            'Golongan' => $Golongan,
         ]);
     }
 

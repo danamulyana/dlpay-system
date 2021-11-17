@@ -23,7 +23,6 @@ class CreateCollectAttendancesTable extends Migration
             $table->string('jam_Keluar_photo_path', 2048)->nullable();
             $table->string('keterangan_detail')->comment('buat keterangan untuk user/admin');
             $table->enum('keterangan',['hadir', 'terlambat', 'tidak masuk'])->nullable();
-            $table->integer('overtime')->default(0);
             $table->string('createdBy')->nullable();
             $table->string('updatedBy')->nullable();
             $table->timestamps();

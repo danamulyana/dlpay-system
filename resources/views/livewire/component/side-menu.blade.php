@@ -124,7 +124,7 @@
                                     <i data-feather="list"></i>
                                 </div>
                                 <div class="side-menu__title">
-                                    Priset / Remark
+                                    Remark
                                 </div>
                             </a>
                         </li>

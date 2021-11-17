@@ -109,7 +109,7 @@
 
                 <x-jet-input-error for="uid" class="mt-2" />
             </div>
-            <div x-data="{ open: false }">
+            {{-- <div x-data="{ open: false }">
                 <div class="mt-3"> 
                     <label>With Privilage</label>
                     <div class="mt-2">
@@ -121,7 +121,7 @@
                 <div class="mt-5" x-show="open" @click.away="open = false">
                     <x-jet-label for="name" value="{{ __('Privelage ') }}"/>
                 </div>
-            </div>
+            </div> --}}
             <div class="my-4">
                 <x-jet-label for="name" value="{{ __('Nama') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"
@@ -201,11 +201,11 @@
         </x-slot>
 
         <x-slot name="content">
-            <div class="mt-5">
+            {{-- <div class="mt-5">
                 <x-jet-label for="dataPrivelage" value="{{ __('Privelage ') }}" />
-                {{-- <x-multiselect wire:model="dataPrivelage" :options="{{ $employesFilter }}"></x-multiselect> --}}
+                <x-multiselect wire:model="dataPrivelage" :options="{{ $employesFilter }}"></x-multiselect>
 
-            </div>
+            </div> --}}
             <div class="my-4">
                 <x-jet-label for="data.name" value="{{ __('Nama') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"

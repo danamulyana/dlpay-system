@@ -186,6 +186,26 @@
                     <x-jet-input-error for="departement" class="mt-2" />
                 </div>
                 @endif
+
+                {{-- golongan --}}
+
+                <div class="my-10">
+                    <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
+                        <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Golongan</div> 
+                    </div> 
+                </div>
+
+                <div class="mt-5">
+                    <x-jet-label for="golongan" value="{{ __(' Golongan') }}" />
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="data.golongan">
+                        <option value="">---  Golongan ---</option>
+                        @foreach ($Golongan as $data)
+                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                        @endforeach
+                    </select>
+                    <x-jet-input-error for="data.golongan" class="mt-2" />
+                </div>
+                {{-- END : golongan --}}
                 {{-- hak akses --}}
                 <div class="my-10">
                     <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 

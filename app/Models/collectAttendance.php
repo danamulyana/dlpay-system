@@ -17,7 +17,6 @@ class collectAttendance extends Model
         'user_id',
         'jam_masuk',
         'jam_Keluar',
-        'overtime',
         'keterangan_detail',
         'keterangan',
         'createdBy',

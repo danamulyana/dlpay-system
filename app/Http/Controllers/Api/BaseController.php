@@ -82,4 +82,12 @@ class BaseController extends Controller
 
         $data->save();
     }
+
+    // absence
+    public function sendErrorAbsence($errorMessage)
+    {
+        $response = "x*".$errorMessage."*x";
+
+        return $response;
+    }
 }

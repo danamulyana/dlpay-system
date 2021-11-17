@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,9 @@ Route::post('/', [device::class, 'index']);
 Route::post('/getroom', [device::class, 'getroom']);
 Route::post('/registerdev', [device::class, 'registerdev']);
 Route::post('/access_room', [device::class, 'access_room']);
+
+// absence
+Route::get('/datetime', [AbsenceController::class, 'datetime']);
+Route::post('/absensirfidcam', [AbsenceController::class, 'absensi']);
+Route::post('/getmoderfidcam ', [AbsenceController::class, 'getmode']);
+// Route::post('/datetime', [AbsenceController::class, 'datetime']);

@@ -19,6 +19,7 @@ use App\Http\Livewire\Superadmin\ManagementUsers;
 use App\Http\Controllers\FileDownloadController;
 use App\Http\Livewire\Component\Select2;
 use App\Http\Livewire\Device\Priset;
+use App\Http\Livewire\Master\Golongan;
 use Illuminate\Support\Facades\Route;
 
 /*
