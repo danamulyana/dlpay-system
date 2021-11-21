@@ -22,7 +22,6 @@ class CreateDoorlockDevicesTable extends Migration
             $table->enum('type',['restricted','public'])->default('public');
             $table->enum('access_type',['in','out']);
             $table->boolean('access_mode')->default(false);
-            $table->boolean('access_Privelage')->default(true);
             $table->string('createdBy')->nullable();
             $table->string('updatedBy')->nullable();
             $table->timestamps();

@@ -20,6 +20,7 @@ use App\Http\Controllers\FileDownloadController;
 use App\Http\Livewire\Component\Select2;
 use App\Http\Livewire\Device\Priset;
 use App\Http\Livewire\Master\Golongan;
+use App\Http\Livewire\User\ProfileInformation;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,12 +36,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', Dashboard::class)->name('dashboard');
 
-Route::get('testing', function () {
-    return view('welcome');
-});
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     // master Route
     Route::get('management-users', ManagementUsers::class)->name('management users');
+    Route::get('profile', ProfileInformation::class)->name('ProfileInformation');
 
     Route::prefix('m')->group(function () {
         Route::get('departement', Departement::class)->name('master.departement');

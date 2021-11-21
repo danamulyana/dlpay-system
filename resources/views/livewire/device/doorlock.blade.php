@@ -173,11 +173,27 @@
                 <x-jet-input-error for="type" class="mt-2" />
             </div>
 
-            <div class="mt-3"> 
-                <label>Remark</label>
-                <div class="mt-2">
-                    <div class="form-check"> 
-                        <input class="form-check-switch" type="checkbox" wire:model="access_mode"> 
+            <div x-data="{ open: false }">
+                <div class="mt-3"> 
+                    <label>Remark</label>
+                    <div class="mt-2">
+                        <div class="form-check"> 
+                            <input @click="open = true" class="form-check-switch" type="checkbox" wire:model="access_mode"> 
+                        </div>
+                    </div>
+                </div>
+    
+                <div x-show="open" @click.away="open = false">
+                    <div class="mt-5" wire:ignore>
+                        <x-jet-label for="remarkData" value="{{ __('Remarks') }}" />
+        
+                        <x-select2-multiple id="remarkData" wire:model="remarkData">
+                            @foreach ($remarks as $r)
+                            <option value="{{ $r->id }}">{{ $r->name }}</option>
+                            @endforeach
+                        </x-select2-multiple>
+                            
+                        <x-jet-input-error for="remarkData" class="mt-2" />
                     </div>
                 </div>
             </div>
@@ -244,11 +260,29 @@
                 </select>
                 <x-jet-input-error for="type" class="mt-2" />
             </div>
-            <div class="mt-3"> 
-                <label>Remark</label>
-                <div class="mt-2">
-                    <div class="form-check"> 
-                        <input class="form-check-switch" type="checkbox" wire:model="data.access_mode"> 
+            <div>
+                <div class="mt-3"> 
+                    <label>Remark</label>
+                    <div class="mt-2">
+                        <div class="form-check"> 
+                            <input class="form-check-switch" type="checkbox" wire:model="data.access_mode"> 
+                        </div>
+                    </div>
+                </div>
+    
+                <div>
+                    <div class="mt-5" wire:ignore>
+                        <x-jet-label for="remarkDataEdit" value="{{ __('Remarks') }}" />
+
+                        <div wire:ignore>
+                            <select id="remarkEdit" class=" select2" multiple="multiple" style="width: 75%;" wire:model="remarkDataEdit">
+                                @foreach ($remarks as $remark)
+                                <option value="{{ $remark->id }}">{{ $remark->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                            
+                        <x-jet-input-error for="remarkDataEdit" class="mt-2" />
                     </div>
                 </div>
             </div>
@@ -294,3 +328,17 @@
         </x-slot>
     </x-jet-dialog-modal>
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:load', () => {
+            $('#remarkEdit').select2().on('change', function (e) {
+                let data = $(this).val();
+                @this.set('remarkDataEdit', data);
+            });
+        })
+        Livewire.on('select2modal', () => {
+            $('#remarkEdit').trigger('change');   //the trigerr data selected into modal
+        }); 
+    </script>
+@endpush

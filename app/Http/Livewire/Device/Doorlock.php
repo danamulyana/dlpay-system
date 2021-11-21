@@ -31,10 +31,10 @@ class Doorlock extends Component
     public $id_del, $password;
 
     // add
-    public $uid, $type, $location, $name,$departement, $withPrivilage, $accesstype, $remark, $access_mode = false, $privelage = [];
+    public $uid, $type, $location, $name,$departement, $withPrivilage, $accesstype, $remarkData, $access_mode = false, $privelage = [];
 
     // edit
-    public $data, $dataPrivelage;
+    public $data, $remarkDataEdit;
 
     protected $rules = [
         'uid' => 'required|unique:App\Models\attendanceDevice,uid|unique:App\Models\doorlockDevices,uid',
@@ -69,6 +69,7 @@ class Doorlock extends Component
 
         $data = doorlockDevices::find($this->id_del);
         $data->delete();
+        $data->remarks()->detach();
 
         $this->flash('success','DoorLock Device Berhasil di Hapus.');
         return redirect()->route('device.doorlock');
@@ -98,24 +99,24 @@ class Doorlock extends Component
 
         $data->save();
 
-        foreach ($this->privelage as $value) {
-            $data->privelage()->attach($value);
-        }
+        $data->remarks()->sync($this->remarkData);
 
         $this->flash('success','DoorLock Device Berhasil di Tambahkan.');
         return redirect()->route('device.doorlock');
     }
     public function showmodalEdit($id)
     {
+        $this->emit('select2modal');
         $this->confirmingEditModal = true;
         $data = doorlockDevices::find($id);
-        // $this->dataPrivelage = $data->privelage()->get();
+        $remark = [];
+        foreach ($data->remarks as $value) {
+            $remark[] = $value->pivot->priset_id;
+        }
+        $this->remarkDataEdit = $remark;
         $this->data = $data->toArray();
         $this->dataAccess_mode = $data->access_mode;
 
-        foreach ($data->privelage()->get() as $value) {
-            $this->dataPrivelage[] = (string)$value->id;
-        }
     }
 
     public function edit()
@@ -136,6 +137,8 @@ class Doorlock extends Component
         $data->updatedBy = auth()->user()->username;
 
         $data->save();
+
+        $data->remarks()->sync($this->remarkDataEdit);
 
         $this->flash('success','DoorLock Device Berhasil di Ubah.');
         return redirect()->route('device.doorlock');

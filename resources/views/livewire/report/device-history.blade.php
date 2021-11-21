@@ -69,7 +69,7 @@
                 <tbody>
                     @foreach ($history as $data)
                     <tr class="intro-x" wire:key="{{ $loop->index }}">
-                        <td class="text-center">{{ $loop->index + 1}}</td>
+                        <td class="text-center">{{ $history->count() * ($history->currentPage() - 1) + $loop->iteration}}</td>
                         <td class="text-center">{{ $data->karyawan->nama }}</td>
                         <td class="text-center">{{ $data->device($data->uid) }}</td>
                         <td class="text-center">{{ $data->keterangan }}</td>

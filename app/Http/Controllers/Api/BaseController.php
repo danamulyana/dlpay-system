@@ -7,6 +7,7 @@ use App\Models\collectAttendance;
 use App\Models\HistoryDeviceLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class BaseController extends Controller
 {
@@ -19,15 +20,45 @@ class BaseController extends Controller
 
         return response()->json($response, $code);
     }
-    public function sendMessage($status, $ketetangan, $nama, $departement, $lock, $namaroom, $code = 200)
+    public function withremarks($remarks,$link)
+    {
+        $response = [
+            "data" => $remarks->makeHidden(['createdBy','updatedBy','created_at','updated_at','pivot']),
+            "links" => [
+                "self" => URL::temporarySignedRoute('withremarks', now()->addMinutes(5),['id' => $link->id]),
+            ],
+        ];
+        return $response;
+    }
+    public function withLinksCounter($link,$expired = 5)
+    {
+        $response = [
+            "self" => URL::temporarySignedRoute('withcounter', now()->addMinutes($expired),['id' => $link->id]),
+        ];
+        return $response;
+    }
+
+    public function sendMessage($status, $keterangan, $departement, $lock, $device, $user, $remarks = [], $links = [], $code = 200)
     {
         $response = [
             'status' => $status, 
-            'ket' => $ketetangan,
-            'nama' => $nama, 
+            'ket' => $keterangan,
+            'nama' => $user->nama, 
             'department' => $departement, 
             'lock' => $lock, 
-            'nama_room' => $namaroom
+            'nama_room' => $device->name,
+            'remark' => $device->access_mode,
+            'data' => [
+                'user' => [
+                    'id' => $user->id,
+                    'nip' => $user->nip,
+                    'rfid_number' => $user->rfid_number,
+                    'fingerprint' => $user->fingerprint,
+                    'doorTime' => $user->user_DoorTime,
+                ],
+                "remarks" => $remarks,
+            ],
+            "links" => $links,
         ];
 
         return response()->json($response, $code);
@@ -46,7 +77,7 @@ class BaseController extends Controller
 
     public function SendHistory($id_karyawan, $keterangan, $id_room, $absence = false ,$remarks_log = '-')
     {
-        HistoryDeviceLog::create([
+        $id_history = HistoryDeviceLog::create([
             'uid' => $id_room,
             'user_id' => $id_karyawan,
             'keterangan' => $keterangan,
@@ -55,7 +86,40 @@ class BaseController extends Controller
             'createdBy' => 'Tazaka Room : ' . $id_room,
             'updatedBy' => 'Tazaka Room : ' . $id_room,
         ]);
+
+        return $id_history;
     }
+
+    public function editHistory($id_history,$remarks)
+    {
+        $data = HistoryDeviceLog::find($id_history);
+        $data->remark_log = $remarks;
+        $data->save();
+    }
+
+    public function sendResponseRemark($status, $keterangan, $departement, $lock, $device, $user,$code = 200)
+    {
+        $response = [
+            'status' => $status, 
+            'ket' => $keterangan,
+            'nama' => $user->nama, 
+            'department' => $departement, 
+            'lock' => $lock, 
+            'nama_room' => $device->name,
+            'data' => [
+                'user' => [
+                    'id' => $user->id,
+                    'nip' => $user->nip,
+                    'rfid_number' => $user->rfid_number,
+                    'fingerprint' => $user->fingerprint,
+                    'doorTime' => $user->user_DoorTime,
+                ],
+            ],
+        ];
+
+        return response()->json($response,$code);
+    }
+
     public function sendAttendance($uid, $user_id, $jamMasuk, $jamKeluar, $keterangan, $record, $cb)
     {
         collectAttendance::create([

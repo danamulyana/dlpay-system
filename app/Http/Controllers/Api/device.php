@@ -26,7 +26,13 @@ class device extends BaseController
 
     public function index()
     {
-        return "REST API for Device";
+        $response = [
+            "success" => true,
+            "message" => "Welcome To Api Doorlock PT Cahaya Sukses Plastindo",
+            "data" => [],
+        ];
+
+        return response()->json($response);
     }
     public function registerdev(Request $request)
     {
@@ -82,11 +88,7 @@ class device extends BaseController
                 
                 $cek_device = doorlockDevices::where('uid',$request->iddev)->first();
                 if (is_null($cek_device)) {
-                    $cek_device = attendanceDevice::where('uid',$request->iddev)->first();
-                    
-                    if (is_null($cek_device)) {
-                        return $this->sendError('Device tidak terdaftar');
-                    }
+                    return $this->sendError('Device tidak terdaftar');
                 }
                 
                 $cekRfid = memployee::where('rfid_number',$request->rfid)->first();
@@ -94,105 +96,35 @@ class device extends BaseController
                     return $this->sendError('RFID tidak terdaftar');
                 }
 
-                // buat absen
-                // if ($cek_device->is_attendance == 1) {
-                //     $workingTime = workingTime::all();
-                    
-                //     foreach ($workingTime as $key => $time) {
-                //         // jam masuk
-                //         if ($time->jam_masuk >= Carbon::now()->format('H:i')) {
-                //             if ($cekRfid->attendance_type == '2') {
-                //                 $history = HistoryDeviceLog::where('is_attendance',true)->orWhere('user_id',$cekRfid->id)->orderBy('created_at', 'desc')->first();
-                //                 if ($history == null) {
-                //                     $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                //                     return $this->sendMessage('success','attendance recorded',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                //                 }
-                //                 if ($history->uid === $cek_device->uid) {
-                //                     $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                //                     return $this->sendMessage('success','attendance recorded',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                //                 }
-                //             }
-                //             $isdata = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today())->first();
-                //             if (!$isdata) {
-                //                 if ($time->jam_masuk > 10) {
-                //                     return 'okeh';
-                //                 }
-                //                 $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                //                 $this->sendAttendance($cek_device->uid,$cekRfid->id,Carbon::now(),'-','','', 'Tazaka Room : ' . $cek_device->uid);
-                //                 return $this->sendMessage('success','attendance recorded',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                //             }
-                //             $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                //             return $this->sendMessage('success','attendance recorded',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                //         }
-                //         // jam keluar
-                //         if (Carbon::now()->format('H:i') >= $time->jam_keluar ) {
-                //             $cek_user = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
-                //             if (!is_null($cek_user)) {
-                //                 $overtime = Carbon::createFromTimeString($time->jam_keluar)->diffInHours();
-                //                 $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                //                 $this->updateAttendance($cek_user->id,$cek_device->uid,$cekRfid->id,$cek_user->jam_masuk,Carbon::now(),$overtime);
-                //                 return $this->sendMessage('success','attendance recorded',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                //             }
-                //         }
-                //     }
-                // }
-
+                $lock  = $cek_device->access_mode == 1 ? 'close' : 'open';
+                
                 if ($cek_device->type == 'restricted') {
                     if ($cek_device->departement_id === $cekRfid->departement_id) {
-                        if ($cek_device->access_Privelage == 1) {
-                            $cekPrivelage = $cek_device->Privelage()->get();
-                            foreach ($cekPrivelage as  $value) {
-                                if ($value->rfid_number == $request->rfid) {
-                                    $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
-                                    return $this->sendMessage('success','Access Granted',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                                }
-                            }
-                            return $this->sendMessage('failed','User No Access',$cekRfid->nama,$cekRfid->departement->nama,'close',$cek_device->name);
-                        }else{
-                            $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
-                            return $this->sendMessage('success','Access Granted',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                        }
-                    }
-                    return $this->sendMessage('failed','No Access',$cekRfid->nama,$cekRfid->departement->nama,'close',$cek_device->name);
-                }
-
-                // Jika Ada Privelage
-                if ($cek_device->access_Privelage == 1) {
-                    $cekPrivelage = $cek_device->Privelage()->get();
-
-                    foreach ($cekPrivelage as  $value) {
-                        if ($value->rfid_number == $request->rfid) {
-                            $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
-                            return $this->sendMessage('success','Access Granted',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
-                        }
-                    }
-                    return $this->sendMessage('failed','No Access',$cekRfid->nama,$cekRfid->departement->nama,'close',$cek_device->name);
-                }
-
-                // with Remark
-                if ($cek_device->access_mode == 1) {
-                    if ($cek_device->access_Privelage == 1) {
-                        $cekPrivelage = $cek_device->Privelage()->get();
+                        $cekPrivelage = $cekRfid->Doorlock()->get(['uid']);
                         foreach ($cekPrivelage as  $value) {
-                            if ($value->rfid_number == $request->rfid) {
-
-                                $timeRemark = 3600;
-
-
-
-                                $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
-                                return $this->sendMessage('success','Access Granted',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
+                            if ($value->uid == $cek_device->uid) {
+                                $history = $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
+                                $withremark = $this->withremarks($cek_device->remarks,$history);
+                                $withLinks = $this->withLinksCounter($history,$cekRfid->user_DoorTime);
+                                return $this->sendMessage('success','Access Granted',$cekRfid->departement->nama,$lock,$cek_device, $cekRfid,$withremark,$withLinks);
                             }
                         }
-                        return $this->sendMessage('failed','User No Access',$cekRfid->nama,$cekRfid->departement->nama,'close',$cek_device->name);
-                    }else{
-                        $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
-                        return $this->sendMessage('success','Access Granted',$cekRfid->nama,$cekRfid->departement->nama,'open',$cek_device->name);
+                        return $this->sendMessage('failed','No Access',$cekRfid->departement->nama,'close',$cek_device, $cekRfid);
                     }
                 }
-                // Semua Pegawai / Public
-                return $this->sendError($cek_device);
-                // $cekAccessRoom = 
+
+                // Cek Privelage
+                $cekPrivelage = $cekRfid->Doorlock()->get(['uid']);
+
+                foreach ($cekPrivelage as  $value) {
+                    if ($value->uid == $cek_device->uid) {
+                        $history = $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
+                        $withremark = $this->withremarks($cek_device->remarks,$history);
+                        $withLinks = $this->withLinksCounter($history,$cekRfid->user_DoorTime);
+                        return $this->sendMessage('success','Access Granted',$cekRfid->departement->nama,$lock,$cek_device, $cekRfid,$withremark,$withLinks);
+                    }
+                }
+                return $this->sendMessage('failed','No Access',$cekRfid->departement->nama,'close',$cek_device, $cekRfid);
 
             }else{
                 return $this->sendError('salah secret key');
@@ -200,5 +132,42 @@ class device extends BaseController
         }else{
             return $this->sendError('salah parameter');
         }
+    }
+
+    public function remarks(Request $request, $id)
+    {
+        if (! $request->hasValidSignature()) {
+            return $this->sendError('Link Expired',401);
+        }
+
+        $history = HistoryDeviceLog::find($id);
+
+        if (!$history) {
+            return $this->sendError('Data Not Found');
+        }
+
+        return response()->json($history);
+
+        if (isset($request->key) && isset($request->remark) && isset($request->iddev)) {
+            if ($this->key == $request->key) {
+                $cekRemark = doorlockDevices::find($history->uid);
+                $user = memployee::find($history->user_id);
+                if ($request->iddev == $history->uid) {
+                    foreach ($cekRemark->remarks as $value) {
+                        if ($request->remark == $value->id) {
+                            $this->editHistory($id,$value->name);
+                            return $this->sendResponseRemark('success','Access Granted',$user->departement->nama,'open',$cekRemark,$user);
+                        }
+                    }
+                    return $this->sendResponseRemark('failed','No Access',$user->departement->nama,'close',$cekRemark, $user);
+                }
+            }
+            return $this->sendError('salah secret key');
+        }
+        return $this->sendError('salah parameter');
+    }
+    public function counter(Request $request, $id)
+    {
+        # code...
     }
 }

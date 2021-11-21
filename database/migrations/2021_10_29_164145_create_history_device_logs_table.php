@@ -20,6 +20,7 @@ class CreateHistoryDeviceLogsTable extends Migration
             $table->string('keterangan');
             $table->boolean('is_attendance')->default(false);
             $table->string('remark_log')->nullable();
+            $table->integer('count_access')->default(0);
             $table->string('createdBy')->nullable();
             $table->timestamps();
         });

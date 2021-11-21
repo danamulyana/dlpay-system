@@ -19,6 +19,7 @@ class CreateMemployeesTable extends Migration
             $table->string('rfid_number')->unique();
             $table->string('fingerprint')->unique()->nullable();
             $table->enum('attendance_type',[1,2]);
+            $table->integer('user_DoorTime')->default(5);
             $table->string('nama');
             $table->string('job_title');
             $table->string('alamat')->nullable();

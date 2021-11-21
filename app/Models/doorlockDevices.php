@@ -16,6 +16,7 @@ class doorlockDevices extends Model
     protected $fillable = [
         'uid',
         'name',
+        'type',
         'access_type',
         'access_mode',
         'createdBy',
@@ -29,6 +30,15 @@ class doorlockDevices extends Model
             'doorlock_has_employees',
             'doorlock_id',
             'memployes_id'
+        );
+    }
+    public function remarks() : BelongsToMany
+    {
+        return $this->belongsToMany(
+            mpriset::class,
+            'doorlock_has_priset',
+            'doorlock_id',
+            'priset_id'
         );
     }
     public function Location() : BelongsTo

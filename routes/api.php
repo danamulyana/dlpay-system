@@ -24,6 +24,8 @@ Route::post('/', [device::class, 'index']);
 Route::post('/getroom', [device::class, 'getroom']);
 Route::post('/registerdev', [device::class, 'registerdev']);
 Route::post('/access_room', [device::class, 'access_room']);
+Route::post('/remarks/{id}', [device::class, 'remarks'])->name('withremarks');
+Route::post('/counter/{id}', [device::class, 'counter'])->name('withcounter');
 
 // absence
 Route::get('/datetime', [AbsenceController::class, 'datetime']);

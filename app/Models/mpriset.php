@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class mpriset extends Model
 {
@@ -16,4 +17,13 @@ class mpriset extends Model
         'createdBy',
         'updatedBy',
     ];
+    public function Doorlock() : BelongsToMany
+    {
+        return $this->belongsToMany(
+            doorlockDevices::class,
+            'doorlock_has_priset',
+            'priset_id',
+            'doorlock_id',
+        );
+    }
 }
