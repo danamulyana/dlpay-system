@@ -20,6 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/test', function (Request $request) {
+    return $request->ip();
+});
+
 Route::post('/', [device::class, 'index']);
 Route::post('/getroom', [device::class, 'getroom']);
 Route::post('/registerdev', [device::class, 'registerdev']);

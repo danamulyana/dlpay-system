@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Resources\HistoryResource;
 use App\Models\attendanceDevice;
-use App\Models\collectAttendance;
 use App\Models\doorlockDevices;
 use App\Models\HistoryDeviceLog;
 use App\Models\memployee;
-use App\Models\workingTime;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -146,8 +143,6 @@ class device extends BaseController
             return $this->sendError('Data Not Found');
         }
 
-        return response()->json($history);
-
         if (isset($request->key) && isset($request->remark) && isset($request->iddev)) {
             if ($this->key == $request->key) {
                 $cekRemark = doorlockDevices::find($history->uid);
@@ -168,6 +163,27 @@ class device extends BaseController
     }
     public function counter(Request $request, $id)
     {
-        # code...
+        // if (! $request->hasValidSignature()) {
+        //     return $this->sendError('Link Expired',401);
+        // }
+
+        $history = HistoryDeviceLog::find($id);
+
+        if (!$history) {
+            return $this->sendError('Data Not Found');
+        }
+        if (isset($request->key) && isset($request->count) && isset($request->iddev)) {
+            if ($this->key == $request->key) {
+                $door = doorlockDevices::find($history->uid);
+                $user = memployee::find($history->user_id);
+                if ($request->iddev == $history->uid) {
+                    $data = $this->editHistoryCount($id,$request->count);
+
+                    return response()->json(new HistoryResource($data));
+                }
+            }
+            return $this->sendError('salah secret key');
+        }
+        return $this->sendError('salah parameter');
     }
 }

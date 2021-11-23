@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Report;
 
 use App\Models\HistoryDeviceLog;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,6 +18,7 @@ class DeviceHistory extends Component
 
     public function render()
     {
+        // dd(strtotime('- 1 month'), Carbon::parse(strtotime('- 1 month')));
         $history = HistoryDeviceLog::query()->orderBy($this->sortColumnName, $this->sortDirection)->paginate($this->perPage);
         return view('livewire.report.device-history',[
             'history' => $history,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\collectAttendance;
 use App\Models\HistoryDeviceLog;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
@@ -96,6 +97,14 @@ class BaseController extends Controller
         $data->remark_log = $remarks;
         $data->save();
     }
+    public function editHistoryCount($id_history,$counter)
+    {
+        $data = HistoryDeviceLog::find($id_history);
+        $data->count_access = $counter;
+        $data->save();
+
+        return $data;
+    }
 
     public function sendResponseRemark($status, $keterangan, $departement, $lock, $device, $user,$code = 200)
     {
@@ -120,12 +129,26 @@ class BaseController extends Controller
         return response()->json($response,$code);
     }
 
-    public function sendAttendance($uid, $user_id, $jamMasuk, $jamKeluar, $keterangan, $record, $cb)
+    // absence
+    public function sendErrorAbsence($errorMessage)
+    {
+        $response = "x*".$errorMessage."*x";
+
+        return $response;
+    }
+    public function sendMessageAbsence($response,$nama,$statFoto, $wkt)
+    {
+        $response = "x*success*".$response."*".$nama."*".$wkt."*".$statFoto."*x";
+        return $response;
+    }
+
+    public function sendAttendance($uid, $user_id, $jamKeluar, $keterangan, $record, $cb, $photojamMasuk)
     {
         collectAttendance::create([
             'uid' => $uid,
             'user_id' => $user_id,
-            'jam_masuk' => $jamMasuk,
+            'jam_masuk' => Carbon::now(),
+            'jam_masuk_photo_path' => $photojamMasuk,
             'jam_keluar' => $jamKeluar,
             'keterangan' => $keterangan,
             'keterangan_detail' => $record,
@@ -145,13 +168,5 @@ class BaseController extends Controller
         $data->updatedBy = 'Tazaka Room : ' . $uid;
 
         $data->save();
-    }
-
-    // absence
-    public function sendErrorAbsence($errorMessage)
-    {
-        $response = "x*".$errorMessage."*x";
-
-        return $response;
     }
 }

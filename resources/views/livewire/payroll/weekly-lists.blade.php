@@ -133,14 +133,20 @@
                         <td class="text-center">{{ $data->karyawan->departement->nama }}</td>
                         <td class="text-center">{{ currencyNumericToIDR($data->total_payment) }}</td>
                         <td class="table-report__action w-56">
-                            <div class="flex justify-center items-center">
-                                <button class="flex items-center mr-3" wire:click="showmodalEdit({{ $data->id }})">
-                                    <i class="las la-check-square"></i> Edit
-                                </button>
-                                <button class="flex items-center text-theme-20">
-                                    <i class="las la-check-circle"></i> Approve
-                                </button>
-                            </div>
+                            @if (!$data->Approve)
+                                <div class="flex justify-center items-center">
+                                    <button class="flex items-center mr-3" wire:click="showmodalEdit({{ $data->id }})">
+                                        <i class="las la-check-square"></i> Edit
+                                    </button>
+                                    <button class="flex items-center text-theme-20" wire:click="approvall({{ $data->id }})">
+                                        <i class="las la-check-circle"></i> Approve
+                                    </button>
+                                </div>
+                            @else
+                                <div class="flex justify-center items-center">
+                                    <span class="flex items-center text-theme-20">Approved</span>
+                                </div>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -160,6 +166,14 @@
 
         <x-slot name="content">
             <div class="my-4">
+                <x-jet-label for="ti" value="{{ __('Transaction Id') }}" />
+                <x-jet-input type="text" class="mt-1 block w-3/4"
+                                x-ref="ti"
+                                wire:model.defer="payrols.Transaction_id"
+                                disabled
+                                />
+            </div>
+            <div class="my-4">
                 <x-jet-label for="user_name" value="{{ __('Nama') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"
                                 placeholder="{{ __('Nama') }}"
@@ -169,15 +183,27 @@
                                 />
             </div>
             <div class="my-4">
-                <x-jet-label for="payrols.user_id" value="{{ __('Nama') }}" />
+                <x-jet-label for="payrols.overtime" value="{{ __('Overtime') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"
                                 placeholder="{{ __('Nama') }}"
                                 x-ref="payrols.user_id"
-                                wire:model.defer="payrols.user_id"
+                                wire:model.defer="payrols.overtime"
                                 wire:keydown.enter="edit" 
                                 />
+                <div class="form-help">isi dalam satuan jam contoh : 10 .</div>
 
-                <x-jet-input-error for="payrols.user_id" class="mt-2" />
+                <x-jet-input-error for="payrols.overtime" class="mt-2" />
+            </div>
+            <div class="mt-5">
+                <x-jet-label for="deductions" value="{{ __('Payroll Deduction') }}" />
+                <div wire:ignore>
+                    <select id="deductions" class="select2" multiple="multiple" style="width: 75%;" wire:model="deductionsEdit">
+                        @foreach ($deductions as $value)
+                        <option value="{{ $value->id }}">{{ $value->remark }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <x-jet-input-error for="deductions" class="mt-2" />
             </div>
         </x-slot>
 
@@ -192,3 +218,16 @@
         </x-slot>
     </x-jet-dialog-modal>
 </div>
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:load', () => {
+            $('#deductions').select2().on('change', function (e) {
+                let data = $(this).val();
+                @this.set('deductionsEdit', data);
+            });
+        })
+        Livewire.on('select2modal', () => {
+            $('#deductions').trigger('change');   //the trigerr data selected into modal
+        }); 
+    </script>
+@endpush

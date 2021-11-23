@@ -34,7 +34,7 @@ class Attendance extends Component
     public $data;
 
     protected $rules = [
-        'uid' => 'required|unique:App\Models\attendanceDevice,uid|unique:App\Models\doorlockDevices,uid',
+        'uid' => 'required|unique:App\Models\attendanceDevice',
         'name' => 'required',
         'location' => 'required',
         'departement' => 'required',

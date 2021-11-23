@@ -37,7 +37,7 @@ class Doorlock extends Component
     public $data, $remarkDataEdit;
 
     protected $rules = [
-        'uid' => 'required|unique:App\Models\attendanceDevice,uid|unique:App\Models\doorlockDevices,uid',
+        'uid' => 'required|unique:App\Models\doorlockDevices',
         'name' => 'required',
         'location' => 'required',
         'departement' => 'required',
