@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LocationSeeder::class);
         // $this->call(AbsenceSeeder::class);
         $this->call(prisetSeeder::class);
-        memployee::factory(20)->create();
         $this->call([GolonganSeeder::class]);
+        memployee::factory(20)->create();
     }
 }

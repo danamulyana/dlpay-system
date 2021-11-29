@@ -50,6 +50,7 @@ class Employees extends Component
         'data.nip' => 'required|unique:App\Models\memployee,nip',
         'data.rfid' => 'required',
         'data.attendance_type' => 'required',
+        'data.golongan' => 'required',
         'fingerprint' => 'nullable',
         'data.nama' => 'required|max:220',
         'data.job' => 'required|max:220',
@@ -130,6 +131,7 @@ class Employees extends Component
         $data->credited_accont = $this->credited_accont;
         $data->departement_id = $this->subdepdropdown;
         $data->subdepartement_id = $this->data['subdep'];
+        $data->golongan_id = $this->data['golongan'];
         $data->createdBy = auth()->user()->username;
         $data->updatedBy = auth()->user()->username;
 

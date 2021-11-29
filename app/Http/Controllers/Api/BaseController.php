@@ -156,15 +156,12 @@ class BaseController extends Controller
             'updatedBy' => 'Tazaka Room : ' . $uid,
         ]);
     }
-    public function updateAttendance($id ,$uid, $user_id, $jamMasuk, $jamKeluar,$keterangan, $record)
+    public function updateAttendance($id ,$uid,$photojamKeluar)
     {
         $data = collectAttendance::find($id);
         $data->uid = $uid;
-        $data->user_id = $user_id;
-        $data->jam_masuk = $jamMasuk;
-        $data->jam_keluar = $jamKeluar;
-        $data->keterangan = $keterangan;
-        $data->keterangan_detail = $record;
+        $data->jam_keluar = Carbon::now();
+        $data->jam_keluar_photo_path = $photojamKeluar;
         $data->updatedBy = 'Tazaka Room : ' . $uid;
 
         $data->save();

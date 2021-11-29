@@ -28,4 +28,8 @@ class collectAttendance extends Model
     {
         return $this->belongsTo(memployee::class,'user_id');
     }
+    public function device() : BelongsTo
+    {
+        return $this->belongsTo(attendanceDevice::class,'uid');
+    }
 }

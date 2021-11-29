@@ -23,7 +23,7 @@
                     @endif
                     <div class="ml-4 mr-auto">
                         <div class="font-medium text-base">{{ Auth::user()->name }}</div>
-                        <div class="text-gray-600">{{ Auth::user()->username }}</div>
+                        <div class="text-gray-600">{{'@'. Auth::user()->username }}</div>
                     </div>
                 </div>
                 <div class="p-5 border-t border-gray-200 dark:border-dark-5">
@@ -40,30 +40,23 @@
                         Change Password
                     </a>
                 </div>
-                <div class="p-5 border-t border-gray-200 dark:border-dark-5">
-                    <a class="flex items-center" href="">
-                        <i data-feather="activity" class="w-4 h-4 mr-2"></i> Email Settings
-                    </a>
-                    <a class="flex items-center mt-5" href="">
-                        <i data-feather="box" class="w-4 h-4 mr-2"></i> Saved Credit Cards
-                    </a>
-                    <a class="flex items-center mt-5" href="">
-                        <i data-feather="lock" class="w-4 h-4 mr-2"></i> Social Networks
-                    </a>
-                    <a class="flex items-center mt-5" href="">
-                        <i data-feather="settings" class="w-4 h-4 mr-2"></i> Tax Information
-                    </a>
-                </div>
             </div>
         </div>
         <!-- END: Profile Menu -->
-        @livewire('user.profile-announcement')
+        <div class="col-span-12 lg:col-span-8 2xl:col-span-9">
+            {{-- Personal Information --}}
+            <div id="PersonalInformation" class="">
+                @livewire('user.profile-announcement')
+            </div>
+            {{-- END: Personal Information --}}
+        </div>
     </div>
 </div>
 
 @push('scripts')
     <script>
         document.addEventListener('livewire:load', () => {
+            let PersonalInformation = document.getElementById('PersonalInformation');
             
         })
     </script>

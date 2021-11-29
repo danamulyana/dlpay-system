@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MonthlyPaymentExport;
 use App\Exports\WeeklyPaymentExport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -18,8 +19,14 @@ class FileDownloadController extends Controller
             'Content-Type' => 'text/csv',
         ]);
     }
-    // public function downloadWeeklyPaymentPDF(Request $request)
-    // {
-    //     return (new WeeklyPaymentExport($request->weeks))->download('Payroll Weekly - '. $request->weeks .'.pdf', \Maatwebsite\Excel\Excel::TCPDF);
-    // }
+    public function downloadMonthPaymentEXCEL(Request $request) 
+    {
+        return Excel::download(new MonthlyPaymentExport($request->month), 'Payroll Monthly - '. $request->month . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+    public function downloadMonthPaymentCSV(Request $request)
+    {
+        return Excel::download(new MonthlyPaymentExport($request->month), 'Payroll Monthly - '. $request->month . '.csv', \Maatwebsite\Excel\Excel::CSV, [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
 }

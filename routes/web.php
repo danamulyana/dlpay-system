@@ -20,6 +20,7 @@ use App\Http\Controllers\FileDownloadController;
 use App\Http\Livewire\Component\Select2;
 use App\Http\Livewire\Device\Priset;
 use App\Http\Livewire\Master\Golongan;
+use App\Http\Livewire\Report\AbsenceReport;
 use App\Http\Livewire\User\ProfileInformation;
 use Illuminate\Support\Facades\Route;
 
@@ -64,17 +65,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Route::get('weekly', Weekly::class)->name('payroll.weekly');
         Route::get('weekly/{weekly}', WeeklyLists::class)->name('payroll.weekly.list');
         Route::get('monthly', Monthly::class)->name('payroll.monthly');
-        Route::get('monthly/{month}', MonthLists::class);
+        Route::get('monthly/{month}', MonthLists::class)->name('payroll.monthly.list');
     });
 
     Route::prefix('report')->group(function () {
         Route::get('device-history', DeviceHistory::class)->name('report.device');
+        Route::get('absence', AbsenceReport::class)->name('report.absence');
         Route::get('payment-history', function () {})->name('report.payment');
     });
 
     Route::prefix('files/downloads')->group(function () {
         Route::post('weekly-payroll/excel', [FileDownloadController::class,'downloadWeeklyPaymentEXCEL'])->name('weeklyExcelDownload');
         Route::post('weekly-payroll/csv', [FileDownloadController::class,'downloadWeeklyPaymentCSV'])->name('weeklyCSVDownload');
-        // Route::post('weekly-payroll/pdf', [FileDownloadController::class,'downloadWeeklyPaymentPDF'])->name('weeklyPDFDownload');
+        Route::post('monthly-payroll/excel', [FileDownloadController::class,'downloadMonthPaymentEXCEL'])->name('monthlyExcelDownload');
+        Route::post('monthly-payroll/csv', [FileDownloadController::class,'downloadMonthPaymentCSV'])->name('monthlyCSVDownload');
     });
 });

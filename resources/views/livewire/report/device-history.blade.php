@@ -1,5 +1,5 @@
 <div>
-    <h2 class="intro-y text-lg font-medium mt-10">Weekly Payroll</h2>
+    <h2 class="intro-y text-lg font-medium mt-10">Device History</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2 justify-between">
             <div></div>
@@ -58,6 +58,13 @@
                             </span>
                         </th>
                         <th class="text-center whitespace-nowrap">
+                            COUNTER
+                            <span wire:click="sortBy('count_access')" class="float-right text-sm cursor-pointer">
+                                <i class="las la-arrow-up {{ $sortColumnName === 'count_access' && $sortDirection === 'asc' ? '' : 'text-gray-400' }}"></i>
+                                <i class="las la-arrow-down {{ $sortColumnName === 'count_access' && $sortDirection === 'desc' ? '' : 'text-gray-400' }}"></i>
+                            </span>
+                        </th>
+                        <th class="text-center whitespace-nowrap">
                             CREATED
                             <span wire:click="sortBy('created_at')" class="float-right text-sm cursor-pointer">
                                 <i class="las la-arrow-up {{ $sortColumnName === 'created_at' && $sortDirection === 'asc' ? '' : 'text-gray-400' }}"></i>
@@ -74,7 +81,8 @@
                         <td class="text-center">{{ $data->device($data->uid) }}</td>
                         <td class="text-center">{{ $data->keterangan }}</td>
                         <td class="text-center">{{ $data->remark_log }}</td>
-                        <td class="text-center">{{ $data->created_at->diffForHumans() }}</td>
+                        <td class="text-center">{{ $data->count_access }}</td>
+                        <td class="text-center">{{ $data->created_at }}</td>
                     </tr>
                     @endforeach
                 </tbody>

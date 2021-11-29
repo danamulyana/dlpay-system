@@ -38,6 +38,10 @@ class memployee extends Model
         'updatedBy',
     ];
 
+    public function bank() : BelongsTo
+    {
+        return $this->belongsTo(mbank::class,'bank_account');
+    }
     public function departement() : BelongsTo
     {
         return $this->belongsTo(mdepartement::class, 'departement_id');
@@ -50,6 +54,10 @@ class memployee extends Model
     {
         return $this->belongsTo(msubdepartement::class, 'subdepartement_id');
     }
+    public function Golongan() : BelongsTo
+    {
+        return $this->belongsTo(Golongan::class, 'golongan_id');
+    }
     public function Doorlock() : BelongsToMany
     {
         return $this->belongsToMany(
@@ -59,7 +67,7 @@ class memployee extends Model
             'doorlock_id',
         );
     }
-    public function AttendanceWeekly() : HasMany
+    public function Attendance() : HasMany
     {
         return $this->hasMany(collectAttendance::class,'user_id');
     }

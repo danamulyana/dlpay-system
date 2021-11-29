@@ -82,14 +82,10 @@
             </div>
             <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
-                    <div class="w-56 relative text-gray-700 dark:text-gray-300">
-                        <input type="text" class="form-control w-56 box pr-10 placeholder-theme-13" placeholder="Search...">
-                        <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search"></i>
-                    </div>
                 </div>
                 <div class="dropdown ml-auto sm:ml-0 pl-3">
                     <button class="dropdown-toggle btn px-2 box text-gray-700 dark:text-gray-300" aria-expanded="false">
-                        <span class="w-5 h-5 flex items-center justify-center"> <i class="las la-print"></i> </span>
+                        <span class="h-5 flex items-center justify-center"> <i class="las la-print"></i> Export</span>
                     </button>
                     <div class="dropdown-menu w-40">
                         <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
@@ -103,11 +99,6 @@
                                 <input type="hidden" name="weeks" value="{{ $weekly }}">
                                 <button type="submit" class="flex w-full items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"> <i class="las la-file-csv"></i> Export Csv </button>
                             </form>
-                            {{-- <form action="{{ route('weeklyPDFDownload') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="weeks" value="{{ $weekly }}">
-                                <button type="submit" class="flex w-full items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"> <i class="las la-file-csv"></i> Export Pdf </button>
-                            </form> --}}
                         </div>
                     </div>
                 </div>
@@ -205,6 +196,17 @@
                 </div>
                 <x-jet-input-error for="deductions" class="mt-2" />
             </div>
+            <div class="mt-5">
+                <x-jet-label for="salaryincris" value="{{ __('Salary Increase') }}" />
+                <div wire:ignore>
+                    <select id="salaryincris" class="select2" multiple="multiple" style="width: 75%;" wire:model="salaryincrisEdit">
+                        @foreach ($salaryincris as $value)
+                        <option value="{{ $value->id }}">{{ $value->remark }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <x-jet-input-error for="salaryincris" class="mt-2" />
+            </div>
         </x-slot>
 
         <x-slot name="footer">
@@ -225,9 +227,14 @@
                 let data = $(this).val();
                 @this.set('deductionsEdit', data);
             });
+            $('#salaryincris').select2().on('change', function (e) {
+                let data = $(this).val();
+                @this.set('salaryincrisEdit', data);
+            });
         })
         Livewire.on('select2modal', () => {
             $('#deductions').trigger('change');   //the trigerr data selected into modal
+            $('#salaryincris').trigger('change');   //the trigerr data selected into modal
         }); 
     </script>
 @endpush

@@ -427,29 +427,46 @@
                                     <x-jet-input-error for="view.attendance_type" class="mt-2" />
                                 </div>
                                 <div class="mt-5">
-                                    <x-jet-label for="departement" value="{{ __('Nama Departement') }}" />
+                                    <x-jet-label for="depview" value="{{ __('Nama Departement') }}" />
                                     <select class="form-control form-select mt-2 w-3/4" wire:model="depview">
                                         <option value="">--- Select data departement ---</option>
                                         @foreach ($departement as $data)
                                         <option value="{{ $data->id }}">{{ $data->nama }}</option>
                                         @endforeach
                                     </select>
-                                    <x-jet-input-error for="departement" class="mt-2" />
+                                    <x-jet-input-error for="depview" class="mt-2" />
                                 </div>
                 
                                 @if (!is_null($subview))
                                 <div class="mt-5">
-                                    <x-jet-label for="subdepartement" value="{{ __('Nama Sub Departement') }}" />
+                                    <x-jet-label for="view.subdepartement_id" value="{{ __('Nama Sub Departement') }}" />
                                     <select class="form-control form-select mt-2 w-3/4" wire:model="view.subdepartement_id">
                                         <option value="">--- Select data subdepartement ---</option>
                                         @foreach ($subview as $data)
                                         <option value="{{ $data->id }}">{{ $data->nama }}</option>
                                         @endforeach
                                     </select>
-                                    <x-jet-input-error for="departement" class="mt-2" />
+                                    <x-jet-input-error for="view.subdepartement_id" class="mt-2" />
                                 </div>
                                 @endif
+                                {{-- golongan --}}
+                                <div class="my-10">
+                                    <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
+                                        <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Golongan</div> 
+                                    </div> 
+                                </div>
 
+                                <div class="mt-5">
+                                    <x-jet-label for="view.golongan_id" value="{{ __(' Golongan') }}" />
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="view.golongan_id">
+                                        <option value="">---  Golongan ---</option>
+                                        @foreach ($Golongan as $data)
+                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                    <x-jet-input-error for="view.golongan_id" class="mt-2" />
+                                </div>
+                                {{-- END : golongan --}}
                                 {{-- hak akses --}}
                                 <div class="my-10">
                                     <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 

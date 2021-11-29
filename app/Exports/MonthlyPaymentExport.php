@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\payrollWeekly;
+use App\Models\payrollMonthly;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -15,16 +15,17 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithProperties;
-class WeeklyPaymentExport implements WithProperties, WithColumnWidths, FromQuery,WithMapping, WithColumnFormatting, WithHeadings,WithEvents, ShouldAutoSize
+
+class MonthlyPaymentExport implements WithProperties, WithColumnWidths, FromQuery,WithMapping, WithColumnFormatting, WithHeadings,WithEvents, ShouldAutoSize
 {
     use Exportable;
 
-    public $weeks;
+    public $Month;
     private $rows = 0;
 
-    public function __construct($weeks)
+    public function __construct($month)
     {
-        $this->weeks = $weeks;
+        $this->Month = $month;
     }
 
     public function properties(): array
@@ -32,7 +33,7 @@ class WeeklyPaymentExport implements WithProperties, WithColumnWidths, FromQuery
         return [
             'creator'        => env('APP_SYSTEM','Door Lock Access & Payroll Systems'). env('APP_NAME','PT Cahaya Sukses Plastindo'),
             'lastModifiedBy' => env('APP_SYSTEM','Door Lock Access & Payroll Systems') . env('APP_NAME','PT Cahaya Sukses Plastindo'),
-            'title'          => 'Payroll Report : ' . $this->weeks,
+            'title'          => 'Payroll Report : ' . $this->Month,
             'description'    => 'Latest Payroll at Payroll Systems' . env('APP_NAME','PT Cahaya Sukses Plastindo'),
             'subject'        => 'payroll',
             'keywords'       => 'payroll,export,spreadsheet',
@@ -59,11 +60,10 @@ class WeeklyPaymentExport implements WithProperties, WithColumnWidths, FromQuery
             'Receiver Cust Residence',
         ];
     }
-
     public function query()
     {
-        Carbon::parse($this->weeks);
-        $payroll = payrollWeekly::query()->whereDate('created_at', $this->weeks)->where('Approve',1);
+        Carbon::parse($this->Month);
+        $payroll = payrollMonthly::query()->whereDate('created_at', $this->Month)->where('Approve',1);
         return $payroll;
     }
 
@@ -143,5 +143,4 @@ class WeeklyPaymentExport implements WithProperties, WithColumnWidths, FromQuery
             },
         ];
     }
-
 }

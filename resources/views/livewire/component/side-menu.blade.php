@@ -224,6 +224,16 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{ route('report.absence') }}" class="{{ request()->routeIs('report.absence') ? 'side-menu side-menu--active' : 'side-menu' }}">
+                                <div class="side-menu__icon">
+                                    <i data-feather="tablet"></i>
+                                </div>
+                                <div class="side-menu__title">
+                                    Absence Report
+                                </div>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('report.payment') }}" class="{{ request()->routeIs('report.payment') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
                                     <i data-feather="credit-card"></i>

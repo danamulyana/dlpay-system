@@ -57,10 +57,7 @@ class device extends BaseController
         if (isset($request->key) && isset($request->iddev)) {
             if ($this->key == $request->key) {
                 
-                $cek_device = attendanceDevice::where('uid',$request->iddev)->first();
-                if (is_null($cek_device)) {
-                    $cek_device = doorlockDevices::where('uid',$request->iddev)->first();
-                }
+                $cek_device = doorlockDevices::where('uid',$request->iddev)->first();
                 
                 if (!is_null($cek_device)) {
                     Log::channel('Apilog')->info('Room : ' . $cek_device->name . ' Berhasil Masuk, Success : Device Terdaftar');
