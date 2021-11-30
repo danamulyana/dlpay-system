@@ -21,6 +21,51 @@
                 </li>
                 @auth
                 <li>
+                    <a href="javascript:;" class="{{ request()->routeIs('admin.*') ? 'side-menu side-menu--active' : 'side-menu' }}">
+                        <div class="side-menu__icon">
+                            <i data-feather="database"></i>
+                        </div>
+                        <div class="side-menu__title">
+                            Admin Management
+                            <div class="side-menu__sub-icon">
+                                <i data-feather="chevron-down"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="{{ request()->routeIs('admin.*') ? 'side-menu__sub-open' : '' }}">
+                        <li>
+                            <a href="{{ route('admin.permisions') }}" class="{{ request()->routeIs('admin.permisions') ? 'side-menu side-menu--active' : 'side-menu' }}">
+                                <div class="side-menu__icon">
+                                    <i data-feather="lock"></i>
+                                </div>
+                                <div class="side-menu__title">
+                                    Permisions
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.role') }}" class="{{ request()->routeIs('admin.role') ? 'side-menu side-menu--active' : 'side-menu' }}">
+                                <div class="side-menu__icon">
+                                    <i data-feather="key"></i>
+                                </div>
+                                <div class="side-menu__title">
+                                    Role
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.managementusers') }}" class="{{ request()->routeIs('admin.managementusers') ? 'side-menu side-menu--active' : 'side-menu' }}">
+                                <div class="side-menu__icon">
+                                    <i data-feather="share-2"></i>
+                                </div>
+                                <div class="side-menu__title">
+                                    Management Users
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a href="javascript:;" class="{{ request()->routeIs('master.*') || request()->routeIs('management users') ? 'side-menu side-menu--active' : 'side-menu' }}">
                         <div class="side-menu__icon">
                             <i data-feather="database"></i>
@@ -60,16 +105,6 @@
                                 </div>
                                 <div class="side-menu__title">
                                     Data employees
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('management users') }}" class="{{ request()->routeIs('management users') ? 'side-menu side-menu--active' : 'side-menu' }}">
-                                <div class="side-menu__icon">
-                                    <i data-feather="share-2"></i>
-                                </div>
-                                <div class="side-menu__title">
-                                    Management Users
                                 </div>
                             </a>
                         </li>
@@ -226,7 +261,7 @@
                         <li>
                             <a href="{{ route('report.absence') }}" class="{{ request()->routeIs('report.absence') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
-                                    <i data-feather="tablet"></i>
+                                    <i data-feather="users"></i>
                                 </div>
                                 <div class="side-menu__title">
                                     Absence Report

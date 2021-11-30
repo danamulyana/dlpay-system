@@ -18,6 +18,15 @@ class ManagementUsers extends Component
     public $sortDirection = 'desc';
     public $perPage = '10';
 
+    public $confirmingAddModal = false;
+
+    public function showmodal()
+    {
+        $this->resetErrorBag();
+
+        $this->confirmingAddModal = true;
+    }
+
     public function render()
     {
         $users = User::query()->where('name', 'like', '%'.$this->searchTerms.'%')

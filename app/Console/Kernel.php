@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Models\collectAttendance;
+use App\Models\memployee;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -27,8 +29,15 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function(){
-            Log::debug('Schaduler is running');
-        })->weeklyOn(6,'17:07');
+            $users = memployee::all();
+            foreach ($users as $key => $value) {
+                $cekAbsence = collectAttendance::where('user_id',$value->id);
+                if (!$cekAbsence) {
+                    
+                }
+                // Log::channel('Apilog')->info($cekAbsence->nama);
+            }
+        })->everyMinute()->runInBackground();
     }
 
     /**

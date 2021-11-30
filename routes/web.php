@@ -21,7 +21,9 @@ use App\Http\Livewire\Component\Select2;
 use App\Http\Livewire\Device\Priset;
 use App\Http\Livewire\Master\Golongan;
 use App\Http\Livewire\Report\AbsenceReport;
+use App\Http\Livewire\Superadmin\Roles;
 use App\Http\Livewire\User\ProfileInformation;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,11 +39,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', Dashboard::class)->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function(){
-    // master Route
-    Route::get('management-users', ManagementUsers::class)->name('management users');
-    Route::get('profile', ProfileInformation::class)->name('ProfileInformation');
 
+Route::middleware(['auth:sanctum', 'verified'])->group(function(){
+    Route::prefix('admin')->group(function () {
+        Route::get('permisions', function(){})->name('admin.permisions');
+        Route::get('roles', Roles::class)->name('admin.role');
+        Route::get('management-users', ManagementUsers::class)->name('admin.managementusers');
+    });
+    Route::get('profile', ProfileInformation::class)->name('ProfileInformation');
+    
+    // master Route
     Route::prefix('m')->group(function () {
         Route::get('departement', Departement::class)->name('master.departement');
         Route::get('departement/subdepartement', Subdepartement::class)->name('master.subdepartement');

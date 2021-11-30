@@ -31,8 +31,7 @@ class Weekly extends Component
     {
         $karyawan = memployee::where('payment_mode','weekly')->get();
         foreach ($karyawan as $key => $value) {
-            $attandence = collectAttendance::where('user_id', $value->id)->whereDate('created_at', '>=', Carbon::now()->subDays(5))->count();
-            dd($attandence);
+            $attandence = collectAttendance::where('user_id', $value->id)->where('keterangan','!=','tidak masuk')->whereDate('created_at', '>=', Carbon::now()->subDays(5))->count();
             $payrollCount = payrollWeekly::all()->count();
             $totalOvertime = 0;
             $salary_payment = $value->basic_salary / 4;

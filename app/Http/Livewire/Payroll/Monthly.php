@@ -17,13 +17,16 @@ class Monthly extends Component
     public $sortDirection = 'desc';
     public $perPage = '10';
 
+    public $confirmingAddModal = false;
+    public $confirmingDeleteModal = false;
+
     public $id_del, $password;
 
     public function createPayroll()
     {
-        $karyawan = memployee::where('payment_mode','weekly')->get();
+        $karyawan = memployee::where('payment_mode','monthly')->get();
         foreach ($karyawan as $key => $value) {
-            $attandence = collectAttendance::where('user_id', $value->id)->whereDate('created_at', '>=', Carbon::now()->subDays(30))->count();
+            $attandence = collectAttendance::where('user_id', $value->id)->where('keterangan','!=','tidak masuk')->whereDate('created_at', '>=', Carbon::now()->subDays(30))->count();
             $payrollCount = payrollMonthly::all()->count();
             $totalOvertime = 0;
             $salary_payment = $value->basic_salary;
