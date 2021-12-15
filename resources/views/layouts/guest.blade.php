@@ -7,7 +7,7 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <link rel="shortcut icon" href="{{ asset('dist/images/logo.svg') }}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ asset('dist/images/logo-csp-birumerah.gif') }}" type="image/x-icon">
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">

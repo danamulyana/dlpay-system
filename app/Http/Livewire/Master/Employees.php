@@ -8,6 +8,7 @@ use App\Models\mbank;
 use App\Models\mdepartement;
 use App\Models\memployee;
 use App\Models\msubdepartement;
+use App\Models\workingTime;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -51,6 +52,7 @@ class Employees extends Component
         'data.rfid' => 'required',
         'data.attendance_type' => 'required',
         'data.golongan' => 'required',
+        'data.shiftcode' => 'required',
         'fingerprint' => 'nullable',
         'data.nama' => 'required|max:220',
         'data.job' => 'required|max:220',
@@ -132,6 +134,7 @@ class Employees extends Component
         $data->departement_id = $this->subdepdropdown;
         $data->subdepartement_id = $this->data['subdep'];
         $data->golongan_id = $this->data['golongan'];
+        $data->shiftcode_id = $this->data['shiftcode'];
         $data->createdBy = auth()->user()->username;
         $data->updatedBy = auth()->user()->username;
 
@@ -204,6 +207,8 @@ class Employees extends Component
         $data->credited_accont = $this->view['credited_accont'];
         $data->departement_id = $this->depview;
         $data->subdepartement_id = $this->view['subdepartement_id'];
+        $data->golongan_id = $this->view['golongan_id'];
+        $data->shiftcode_id = $this->view['shiftcode_id'];
         $data->createdBy = auth()->user()->username;
         $data->updatedBy = auth()->user()->username;
 
@@ -233,12 +238,14 @@ class Employees extends Component
         $banks = mbank::all();
         $devices = doorlockDevices::all();
         $Golongan = Golongan::all();
+        $prisetShift = workingTime::all();
         return view('livewire.master.employees',[
             'employees' => $employees,
             'departement' => $departement,
             'banks' => $banks,
             'devices' => $devices,
             'Golongan' => $Golongan,
+            'prisetShift' => $prisetShift,
         ]);
     }
 

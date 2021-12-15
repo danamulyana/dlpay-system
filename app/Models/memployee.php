@@ -71,4 +71,8 @@ class memployee extends Model
     {
         return $this->hasMany(collectAttendance::class,'user_id');
     }
+    public function shiftcode() : BelongsTo
+    {
+        return $this->belongsTo(workingTime::class,'shiftcode_id');
+    }
 }

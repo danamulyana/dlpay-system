@@ -8,7 +8,7 @@
     </div>
     <!-- END: Breadcrumb -->
     <!-- BEGIN: Search -->
-    <div class="intro-x relative mr-3 sm:mr-6">
+    {{-- <div class="intro-x relative mr-3 sm:mr-6">
         <div class="search hidden sm:block">
             <input type="text" class="search__input form-control border-transparent placeholder-theme-13" placeholder="Search...">
             <i data-feather="search" class="search__icon dark:text-gray-300"></i>
@@ -49,7 +49,7 @@
                             <div class="ml-3">{{ $faker['users'][0]['name'] }}</div>
                             <div class="ml-auto w-48 truncate text-gray-600 text-xs text-right">{{ $faker['users'][0]['email'] }}</div>
                         </a>
-                    @endforeach --}}
+                    @endforeach
                 </div>
                 <div class="search-result__content__title">Products</div>
                 {{-- @foreach (array_slice($fakers, 0, 4) as $faker)
@@ -60,10 +60,10 @@
                         <div class="ml-3">{{ $faker['products'][0]['name'] }}</div>
                         <div class="ml-auto w-48 truncate text-gray-600 text-xs text-right">{{ $faker['products'][0]['category'] }}</div>
                     </a>
-                @endforeach --}}
+                @endforeach 
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- END: Search -->
     <!-- BEGIN: Notifications -->
     <div class="intro-x dropdown mr-auto sm:mr-6">

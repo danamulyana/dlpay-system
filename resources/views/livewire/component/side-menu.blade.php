@@ -5,7 +5,7 @@
         <!-- BEGIN: Side Menu -->
         <nav class="side-nav">
             <a href="" class="intro-x flex items-center justify-center pt-2">
-                <img alt="" class="w-12" src="{{ asset('dist/images/logo.svg') }}">
+                <img alt="" class="w-12" src="{{ asset('dist/images/logo-csp-birumerah.gif') }}">
             </a>
             <div class="side-nav__devider my-6"></div>
             <ul>
@@ -269,12 +269,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('report.payment') }}" class="{{ request()->routeIs('report.payment') ? 'side-menu side-menu--active' : 'side-menu' }}">
+                            <a href="{{ route('report.doorlock') }}" class="{{ request()->routeIs('report.doorlock') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
                                     <i data-feather="credit-card"></i>
                                 </div>
                                 <div class="side-menu__title">
-                                    Payment History
+                                    Doorlock Report
                                 </div>
                             </a>
                         </li>

@@ -29,6 +29,7 @@ class CreateMemployeesTable extends Migration
             $table->foreignId('departement_id')->constrained('mdepartements')->onDelete('cascade');
             $table->foreignId('subdepartement_id')->constrained('msubdepartements')->onDelete('cascade');
             $table->foreignId('golongan_id')->constrained('golongans')->onDelete('cascade');
+            $table->foreignId('shiftcode_id')->constrained('working_times')->onDelete('cascade');
             $table->enum('payment_mode',['weekly','monthly']);
             $table->integer('basic_salary');
             $table->enum('transfer_type',[1,2])->comment('Kalo 1 maka tanpa bank kalo 2 pake bank');

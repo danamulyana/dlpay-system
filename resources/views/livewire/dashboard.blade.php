@@ -7,7 +7,6 @@
                     <div>
                         <h2 class="text-lg font-medium truncate mr-5">PT Cahaya Sukses Plastindo</h2>
                         <p>Door Lock Access & Payroll Systems</p>
-                        <button wire:click="openModal">Tes</button>
                     </div>
                     <a href="" class="ml-auto flex items-center text-theme-1 dark:text-theme-10">
                         <i data-feather="refresh-ccw" class="w-4 h-4 mr-3"></i> Reload Data
@@ -75,7 +74,7 @@
                     <h2 class="text-lg font-medium truncate mr-5">Attendance recapitulation</h2>
                 </div>
                 <div class="intro-y box p-5 mt-12 sm:mt-5">
-                    <div class="flex flex-col xl:flex-row xl:items-center">
+                    {{-- <div class="flex flex-col xl:flex-row xl:items-center">
                         <div class="dropdown xl:ml-auto mt-5 xl:mt-0">
                             <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false">
                                 Filter <i data-feather="chevron-down" class="w-4 h-4 ml-2"></i>
@@ -90,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="report-chart">
                         <canvas id="report-line-chart" height="169" class="mt-6"></canvas>
                     </div>

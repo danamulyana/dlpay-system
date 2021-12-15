@@ -35,6 +35,7 @@ class memployeeFactory extends Factory
             'departement_id' => implode('',$this->faker->randomElements([1,2,3,4,5,6])),
             'subdepartement_id' => implode('',$this->faker->randomElements([1,2,3,4,5,6])),
             'golongan_id' => $this->faker->numberBetween(1,24),
+            'shiftcode_id' => 1,
             'payment_mode' => implode('',$this->faker->randomElements(['weekly','monthly'])),
             'basic_salary' => $this->faker->randomNumber(7, true),
             'transfer_type' => implode('',$this->faker->randomElements([1,2])),

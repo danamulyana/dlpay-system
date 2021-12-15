@@ -226,6 +226,25 @@
                 </div>
 
                 {{-- END : Hak akses --}}
+                {{-- Shift Code --}}
+
+                <div class="my-10">
+                    <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
+                        <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Shift Code</div> 
+                    </div> 
+                </div>
+
+                <div class="mt-5">
+                    <x-jet-label for="shiftcode" value="{{ __('Shift Code') }}" />
+                    <select class="form-control form-select mt-2 w-3/4" wire:model="data.shiftcode">
+                        <option value="">---  Shift Code ---</option>
+                        @foreach ($prisetShift as $data)
+                            <option class="my-2" value="{{ $data->id }}">{{ $data->shift_name }}</option>
+                        @endforeach
+                    </select>
+                    <x-jet-input-error for="data.shiftcode" class="mt-2" />
+                </div>
+                {{-- END : Shift Code --}}
                 <div class="my-10">
                     <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
                         <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Info Pribadi</div> 
@@ -487,6 +506,25 @@
                                 </div>
 
                                 {{-- END : Hak akses --}}
+                                {{-- Shift Code --}}
+
+                                <div class="my-10">
+                                    <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 
+                                        <div class="bg-white dark:bg-dark-3 px-5 -mt-3 text-gray-600">Shift Code</div> 
+                                    </div> 
+                                </div>
+
+                                <div class="mt-5">
+                                    <x-jet-label for="shiftcode_id" value="{{ __('Shift Code') }}" />
+                                    <select class="form-control form-select mt-2 w-3/4" wire:model="view.shiftcode_id">
+                                        <option value="">---  Shift Code ---</option>
+                                        @foreach ($prisetShift as $data)
+                                            <option class="my-2" value="{{ $data->id }}">{{ $data->shift_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <x-jet-input-error for="view.shiftcode_id" class="mt-2" />
+                                </div>
+                                {{-- END : Shift Code --}}
                                 
                                 <div class="my-10">
                                     <div class="w-full flex justify-center border-t border-gray-200 dark:border-dark-5 mt-2"> 

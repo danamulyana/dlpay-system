@@ -21,6 +21,7 @@ use App\Http\Livewire\Component\Select2;
 use App\Http\Livewire\Device\Priset;
 use App\Http\Livewire\Master\Golongan;
 use App\Http\Livewire\Report\AbsenceReport;
+use App\Http\Livewire\Superadmin\Permisions;
 use App\Http\Livewire\Superadmin\Roles;
 use App\Http\Livewire\User\ProfileInformation;
 use Illuminate\Routing\RouteGroup;
@@ -42,7 +43,7 @@ Route::get('/', Dashboard::class)->name('dashboard');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::prefix('admin')->group(function () {
-        Route::get('permisions', function(){})->name('admin.permisions');
+        Route::get('permisions', Permisions::class)->name('admin.permisions');
         Route::get('roles', Roles::class)->name('admin.role');
         Route::get('management-users', ManagementUsers::class)->name('admin.managementusers');
     });
@@ -78,7 +79,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::prefix('report')->group(function () {
         Route::get('device-history', DeviceHistory::class)->name('report.device');
         Route::get('absence', AbsenceReport::class)->name('report.absence');
-        Route::get('payment-history', function () {})->name('report.payment');
+        Route::get('doorlock', function () {})->name('report.doorlock');
     });
 
     Route::prefix('files/downloads')->group(function () {
