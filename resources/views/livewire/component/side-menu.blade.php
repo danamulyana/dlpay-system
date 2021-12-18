@@ -33,6 +33,7 @@
                         </div>
                     </a>
                     <ul class="{{ request()->routeIs('admin.*') ? 'side-menu__sub-open' : '' }}">
+                        @can('super_admin')                 
                         <li>
                             <a href="{{ route('admin.permisions') }}" class="{{ request()->routeIs('admin.permisions') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -53,6 +54,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('users_management_access')
                         <li>
                             <a href="{{ route('admin.managementusers') }}" class="{{ request()->routeIs('admin.managementusers') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -63,8 +66,10 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @can('masterData_access')
                 <li>
                     <a href="javascript:;" class="{{ request()->routeIs('master.*') || request()->routeIs('management users') ? 'side-menu side-menu--active' : 'side-menu' }}">
                         <div class="side-menu__icon">
@@ -78,6 +83,7 @@
                         </div>
                     </a>
                     <ul class="{{ request()->routeIs('master.*') || request()->routeIs('management users') ? 'side-menu__sub-open' : '' }}">
+                        @can('departement_show')
                         <li>
                             <a href="{{ route('master.departement') }}" class="{{ request()->routeIs('master.departement') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -88,6 +94,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('subdepartement_show')
                         <li>
                             <a href="{{ route('master.subdepartement') }}" class="{{ request()->routeIs('master.subdepartement') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -98,6 +106,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('pegawai_show')
                         <li>
                             <a href="{{ route('master.employees') }}" class="{{ request()->routeIs('master.employees') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -108,8 +118,11 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+                @can('ManagementDevice_access')
                 <li>
                     <a href="javascript:;" class="{{ request()->routeIs('device.*') ? 'side-menu side-menu--active' : 'side-menu' }}">
                         <div class="side-menu__icon">
@@ -123,6 +136,7 @@
                         </div>
                     </a>
                     <ul class="{{ request()->routeIs('device.*') ? 'side-menu__sub-open' : '' }}">
+                        @can('location_show')
                         <li>
                             <a href="{{ route('device.location') }}" class="{{ request()->routeIs('device.location') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -133,6 +147,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('attandanceDevice_show')
                         <li>
                             <a href="{{ route('device.attendance') }}" class="{{ request()->routeIs('device.attendance') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -143,6 +159,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('doorlockDevice_show')
                         <li>
                             <a href="{{ route('device.doorlock') }}" class="{{ request()->routeIs('device.doorlock') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -153,6 +171,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('remark_show')
                         <li>
                             <a href="{{ route('device.remark') }}" class="{{ request()->routeIs('device.remark') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -163,8 +183,11 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+                @can('ManagementAttendance_access')
                 <li>
                     <a href="javascript:;" class="{{ request()->routeIs('atd.*') ? 'side-menu side-menu--active' : 'side-menu' }}">
                         <div class="side-menu__icon">
@@ -178,6 +201,7 @@
                         </div>
                     </a>
                     <ul class="{{ request()->routeIs('atd.*') ? 'side-menu__sub-open' : '' }}">
+                        @can('workingTime_show')
                         <li>
                             <a href="{{ route('atd.working') }}" class="{{ request()->routeIs('atd.working') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -188,6 +212,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('LeaveAndAbsence_show')
                         <li>
                             <a href="{{ route('atd.absence') }}" class="{{ request()->routeIs('atd.absence') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -198,8 +224,11 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+                @can('Payroll_access')
                 <li>
                     <a href="javascript:;" class="{{ request()->routeIs('payroll.*') ? 'side-menu side-menu--active' : 'side-menu' }}">
                         <div class="side-menu__icon">
@@ -213,6 +242,7 @@
                         </div>
                     </a>
                     <ul class="{{ request()->routeIs('payroll.*') ? 'side-menu__sub-open' : '' }}">
+                        @can('weeklyPayroll_access')
                         <li>
                             <a href="{{ route('payroll.weekly') }}" class="{{ request()->routeIs('payroll.weekly') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -223,6 +253,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('MonthlyPayroll_access')
                         <li>
                             <a href="{{ route('payroll.monthly') }}" class="{{ request()->routeIs('payroll.monthly') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -233,8 +265,11 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+                @can('report_access')
                 <li>
                     <a href="javascript:;" class="{{ request()->routeIs('report.*') ? 'side-menu side-menu--active' : 'side-menu' }}">
                         <div class="side-menu__icon">
@@ -248,6 +283,7 @@
                         </div>
                     </a>
                     <ul class="{{ request()->routeIs('report.*') ? 'side-menu__sub-open' : '' }}">
+                        @can('DeviceHistoryReport_access')
                         <li>
                             <a href="{{ route('report.device') }}" class="{{ request()->routeIs('report.device') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -258,6 +294,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('AbsenceReport_access')
                         <li>
                             <a href="{{ route('report.absence') }}" class="{{ request()->routeIs('report.absence') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -268,6 +306,8 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
+                        @can('DoorlockReport_access')
                         <li>
                             <a href="{{ route('report.doorlock') }}" class="{{ request()->routeIs('report.doorlock') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -278,8 +318,10 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

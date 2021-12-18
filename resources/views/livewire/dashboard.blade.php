@@ -91,7 +91,7 @@
                         </div>
                     </div> --}}
                     <div class="report-chart">
-                        <canvas id="report-line-chart" height="169" class="mt-6"></canvas>
+                        <canvas id="recapotulation-chart" height="169" class="mt-6"></canvas>
                     </div>
                 </div>
             </div>
@@ -129,3 +129,110 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+{{-- <script src="/js/Chart.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
+<script defer>
+    let ctx = document.getElementById("recapotulation-chart").getContext('2d');
+        let myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                ],
+                datasets: [
+                    {
+                        label: "Absence",
+                        data: [
+                            0,
+                            200,
+                            250,
+                            200,
+                            500,
+                            450,
+                            850,
+                            1050,
+                            950,
+                            1100,
+                            900,
+                            1200,
+                        ],
+                        borderWidth: 2,
+                        borderColor: "#3160D8",
+                        backgroundColor: "transparent",
+                        pointBorderColor: "transparent",
+                    },
+                    // {
+                    //     label: "Absence",
+                    //     data: [
+                    //         0,
+                    //         300,
+                    //         400,
+                    //         560,
+                    //         320,
+                    //         600,
+                    //         720,
+                    //         850,
+                    //         690,
+                    //         805,
+                    //         1200,
+                    //         1010,
+                    //     ],
+                    //     borderWidth: 2,
+                    //     borderDash: [2, 2],
+                    //     borderColor: "#a0afbf",
+                    //     backgroundColor: "transparent",
+                    //     pointBorderColor: "transparent",
+                    // },
+                ],
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            ticks: {
+                                fontSize: "12",
+                                fontColor: "#777777",
+                            },
+                            gridLines: {
+                                display: false,
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            ticks: {
+                                fontSize: "12",
+                                fontColor: "#777777",
+                            },
+                            gridLines: {
+                                color: "#D8D8D8",
+                                zeroLineColor: "#D8D8D8",
+                                borderDash: [2, 2],
+                                zeroLineBorderDash: [2, 2],
+                                drawBorder: false,
+                            },
+                        },
+                    ],
+                },
+            },
+        });
+    </script>
+@endpush

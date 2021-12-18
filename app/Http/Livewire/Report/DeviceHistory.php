@@ -18,8 +18,7 @@ class DeviceHistory extends Component
 
     public function render()
     {
-        // dd(strtotime('- 1 month'), Carbon::parse(strtotime('- 1 month')));
-        $history = HistoryDeviceLog::query()->orderBy($this->sortColumnName, $this->sortDirection)->paginate($this->perPage);
+        $history = HistoryDeviceLog::where('created_at', ">", Carbon::now()->subMonth(3))->orWhere('keterangan','LIKE','%'.$this->searchTerms.'%')->orWhereRelation('karyawan','nama', 'like', '%'.$this->searchTerms.'%')->orderBy($this->sortColumnName, $this->sortDirection)->paginate($this->perPage);
         return view('livewire.report.device-history',[
             'history' => $history,
         ]);

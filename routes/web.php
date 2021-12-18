@@ -21,9 +21,13 @@ use App\Http\Livewire\Component\Select2;
 use App\Http\Livewire\Device\Priset;
 use App\Http\Livewire\Master\Golongan;
 use App\Http\Livewire\Report\AbsenceReport;
+use App\Http\Livewire\Report\DoorlockReport;
 use App\Http\Livewire\Superadmin\Permisions;
 use App\Http\Livewire\Superadmin\Roles;
 use App\Http\Livewire\User\ProfileInformation;
+use App\Models\collectAttendance;
+use App\Models\memployee;
+use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +43,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', Dashboard::class)->name('dashboard');
-
+// Route::get('test', function(){
+//     $users = memployee::all();
+//     $absence = [];
+//     $adaAbsen = [];
+//     foreach ($users as $key => $value) {
+//         $cekAbsence = collectAttendance::whereDate('created_at','=',Carbon::today())->where('user_id',$value->id)->first();
+//         if ($cekAbsence === null) {
+//             $absence[] = $value->id;
+//         }else{
+//             $adaAbsen[] = $cekAbsence;
+//         }
+//     }
+//     dd($absence,$adaAbsen);
+// });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::prefix('admin')->group(function () {
@@ -47,7 +64,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Route::get('roles', Roles::class)->name('admin.role');
         Route::get('management-users', ManagementUsers::class)->name('admin.managementusers');
     });
-    Route::get('profile', ProfileInformation::class)->name('ProfileInformation');
     
     // master Route
     Route::prefix('m')->group(function () {
@@ -79,7 +95,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::prefix('report')->group(function () {
         Route::get('device-history', DeviceHistory::class)->name('report.device');
         Route::get('absence', AbsenceReport::class)->name('report.absence');
-        Route::get('doorlock', function () {})->name('report.doorlock');
+        Route::get('doorlock', DoorlockReport::class)->name('report.doorlock');
     });
 
     Route::prefix('files/downloads')->group(function () {

@@ -45,10 +45,28 @@
         <!-- END: Profile Menu -->
         <div class="col-span-12 lg:col-span-8 2xl:col-span-9">
             {{-- Personal Information --}}
-            <div id="PersonalInformation" class="">
+            <div id="PersonalInformation" class="hidden">
                 @livewire('user.profile-announcement')
             </div>
             {{-- END: Personal Information --}}
+            {{-- Accont Setting --}}
+            <div id="accountSetting" class="">
+                @if (Laravel\Fortify\Features::canUpdateProfileInformation())
+                    @livewire('profile.update-profile-information-form')
+
+                    <x-jet-section-border />
+                @endif
+            </div>
+            {{-- END: Account Setting --}}
+            {{-- Change Password --}}
+            @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::updatePasswords()))
+                <div class="mt-10 sm:mt-0">
+                    @livewire('profile.update-password-form')
+                </div>
+
+                <x-jet-section-border />
+            @endif
+            {{-- END: Change Password --}}
         </div>
     </div>
 </div>

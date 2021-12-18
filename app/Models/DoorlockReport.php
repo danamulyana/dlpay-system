@@ -6,32 +6,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class HistoryDeviceLog extends Model
+class DoorlockReport extends Model
 {
     use HasFactory;
 
-    protected $table = 'history_device_logs';
+    protected $table = 'doorlock_reports';
 
     protected $fillable = [
         'uid',
         'user_id',
         'keterangan',
-        'is_attendance',
+        'doorlock_photo_path',
+        'remark_log',
+        'count_access',
         'createdBy',
+        'updatedBy',
     ];
 
     public function karyawan() : BelongsTo
     {
         return $this->belongsTo(memployee::class,'user_id');
     }
-
-    public function deviceDoorlock() : BelongsTo
+    public function device() : BelongsTo
     {
-        return $this->belongsTo(doorlockDevices::class,'uid');
-
-    }
-    public function deviceAbsence() : BelongsTo
-    {
-        return $this->belongsTo(attendanceDevice::class,'uid');
+       return $this->belongsTo(doorlockDevices::class,'uid');
     }
 }

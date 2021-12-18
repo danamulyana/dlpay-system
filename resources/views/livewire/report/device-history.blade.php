@@ -6,7 +6,7 @@
             <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                 <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                     <div class="w-56 relative text-gray-700 dark:text-gray-300">
-                        <input type="text" class="form-control w-56 box pr-10 placeholder-theme-13" placeholder="Search...">
+                        <input type="text" class="form-control w-56 box pr-10 placeholder-theme-13" placeholder="Search..." wire:model="searchTerms">
                         <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search"></i>
                     </div>
                 </div>
@@ -51,20 +51,6 @@
                             </span>
                         </th>
                         <th class="text-center whitespace-nowrap">
-                            REMARK
-                            <span wire:click="sortBy('remark_log')" class="float-right text-sm cursor-pointer">
-                                <i class="las la-arrow-up {{ $sortColumnName === 'remark_log' && $sortDirection === 'asc' ? '' : 'text-gray-400' }}"></i>
-                                <i class="las la-arrow-down {{ $sortColumnName === 'remark_log' && $sortDirection === 'desc' ? '' : 'text-gray-400' }}"></i>
-                            </span>
-                        </th>
-                        <th class="text-center whitespace-nowrap">
-                            COUNTER
-                            <span wire:click="sortBy('count_access')" class="float-right text-sm cursor-pointer">
-                                <i class="las la-arrow-up {{ $sortColumnName === 'count_access' && $sortDirection === 'asc' ? '' : 'text-gray-400' }}"></i>
-                                <i class="las la-arrow-down {{ $sortColumnName === 'count_access' && $sortDirection === 'desc' ? '' : 'text-gray-400' }}"></i>
-                            </span>
-                        </th>
-                        <th class="text-center whitespace-nowrap">
                             CREATED
                             <span wire:click="sortBy('created_at')" class="float-right text-sm cursor-pointer">
                                 <i class="las la-arrow-up {{ $sortColumnName === 'created_at' && $sortDirection === 'asc' ? '' : 'text-gray-400' }}"></i>
@@ -78,10 +64,8 @@
                     <tr class="intro-x" wire:key="{{ $loop->index }}">
                         <td class="text-center">{{ $history->count() * ($history->currentPage() - 1) + $loop->iteration}}</td>
                         <td class="text-center">{{ $data->karyawan->nama }}</td>
-                        <td class="text-center">{{ $data->device($data->uid) }}</td>
+                        <td class="text-center">{{ $data->is_attendance == 1 ? $data->deviceAbsence->name : $data->deviceDoorlock->name }}</td>
                         <td class="text-center">{{ $data->keterangan }}</td>
-                        <td class="text-center">{{ $data->remark_log }}</td>
-                        <td class="text-center">{{ $data->count_access }}</td>
                         <td class="text-center">{{ $data->created_at }}</td>
                     </tr>
                     @endforeach

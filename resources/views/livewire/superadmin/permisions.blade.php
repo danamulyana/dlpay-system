@@ -34,7 +34,7 @@
                 <tbody>
                     @forelse ($permissions as $data)
                     <tr class="intro-x" wire:key="{{ $loop->index }}">
-                        <td class="text-center">{{ $loop->index + 1}}</td>
+                        <td class="text-center">{{ $permissions->count() * ($permissions->currentPage() - 1) + $loop->iteration}}</td>
                         <td class="text-center">{{ $data->name  }}</td>
                     </tr>
                     @empty
@@ -47,7 +47,7 @@
         </div>
         <!-- END: Data List -->
         <!-- BEGIN: Pagination -->
-        {{-- {{ $permissions->links() }} --}}
+        {{ $permissions->links() }}
         <!-- END: Pagination -->
     </div>
 </div>

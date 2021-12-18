@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\collectAttendance;
+use App\Models\DoorlockReport;
 use App\Models\HistoryDeviceLog;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,15 +32,16 @@ class BaseController extends Controller
         ];
         return $response;
     }
-    public function withLinksCounter($link,$expired = 5)
+    public function withLinks($link,$expired = 5)
     {
         $response = [
             "self" => URL::temporarySignedRoute('withcounter', now()->addMinutes($expired),['id' => $link->id]),
+            "related" => URL::temporarySignedRoute('withcapture', now()->addMinutes($expired),['id' => $link->id]),
         ];
         return $response;
     }
 
-    public function sendMessage($status, $keterangan, $departement, $lock, $device, $user, $remarks = [], $links = [], $code = 200)
+    public function sendMessage($status, $keterangan, $departement, $lock, $device, $user, $remarks = [], $links = [], $included = [], $code = 200)
     {
         $response = [
             'status' => $status, 
@@ -76,34 +78,18 @@ class BaseController extends Controller
         return response()->json($response, $code);
     }
 
-    public function SendHistory($id_karyawan, $keterangan, $id_room, $absence = false ,$remarks_log = '-')
+    public function SendHistory($id_karyawan, $keterangan, $id_room, $absence = false)
     {
         $id_history = HistoryDeviceLog::create([
             'uid' => $id_room,
             'user_id' => $id_karyawan,
             'keterangan' => $keterangan,
-            'remark_log' => $remarks_log,
             'is_attendance' => $absence,
             'createdBy' => 'Tazaka Room : ' . $id_room,
             'updatedBy' => 'Tazaka Room : ' . $id_room,
         ]);
 
         return $id_history;
-    }
-
-    public function editHistory($id_history,$remarks)
-    {
-        $data = HistoryDeviceLog::find($id_history);
-        $data->remark_log = $remarks;
-        $data->save();
-    }
-    public function editHistoryCount($id_history,$counter)
-    {
-        $data = HistoryDeviceLog::find($id_history);
-        $data->count_access = $counter;
-        $data->save();
-
-        return $data;
     }
 
     public function sendResponseRemark($status, $keterangan, $departement, $lock, $device, $user,$code = 200)
@@ -127,6 +113,44 @@ class BaseController extends Controller
         ];
 
         return response()->json($response,$code);
+    }
+
+    public function SendDoorlockReport($id_karyawan,$keterangan, $id_room ,$count = 0, $remarks_log = '-')
+    {
+        $id_doorlock = DoorlockReport::create([
+            'uid' => $id_room,
+            'user_id' => $id_karyawan,
+            'keterangan' => $keterangan,
+            'remark_log' => $remarks_log,
+            'count_access' => $count,
+            'createdBy' => 'Tazaka Room : ' . $id_room,
+            'updatedBy' => 'Tazaka Room : ' . $id_room,
+        ]);
+
+        return $id_doorlock;
+    }
+
+    public function editRemark($id_doorlock,$remarks)
+    {
+        $data = DoorlockReport::find($id_doorlock);
+        $data->remark_log = $remarks;
+        $data->save();
+    }
+    public function editCount($id_doorlock,$counter)
+    {
+        $data = DoorlockReport::find($id_doorlock);
+        $data->count_access = $counter;
+        $data->save();
+
+        return $data;
+    }
+    public function editCapture($id_doorlock,$foto)
+    {
+        $data = DoorlockReport::find($id_doorlock);
+        $data->doorlock_photo_path = $foto;
+        $data->save();
+
+        return $data;
     }
 
     // absence

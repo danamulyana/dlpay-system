@@ -14,13 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::insert([
-            [
-                'name' => 'Dana mulyana',
-                'username' => 'danamulyana',
-                'email' => 'danabontot@gmail.com',
-                'password' => '$2y$10$tK8g.RatqIUpZiqTmbbgge7fRtuv2aibT0GfoYBycBdRAels9E/ta', //12345678
-            ]
-        ]);
+        $user = new User();
+        $user->name = 'Dana mulyana';
+        $user->username = 'danamulyana';
+        $user->email = 'danabontot@gmail.com';
+        $user->password = '$2y$10$tK8g.RatqIUpZiqTmbbgge7fRtuv2aibT0GfoYBycBdRAels9E/ta'; //12345678
+        $user->save();
+        $user->assignRole('Admin');
     }
 }

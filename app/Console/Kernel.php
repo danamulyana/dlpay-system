@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Models\collectAttendance;
 use App\Models\memployee;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -30,14 +31,29 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->call(function(){
             $users = memployee::all();
+            $absence = [];
+            $adaAbsen = [];
             foreach ($users as $key => $value) {
-                $cekAbsence = collectAttendance::where('user_id',$value->id);
-                if (!$cekAbsence) {
-                    
+                $cekAbsence = collectAttendance::whereDate('created_at','=',Carbon::today())->where('user_id',$value->id)->first();
+                if ($cekAbsence === null) {
+                    $absence[] = $value->id;
+                }else{
+                    $adaAbsen[] = $cekAbsence;
                 }
-                // Log::channel('Apilog')->info($cekAbsence->nama);
             }
-        })->everyMinute()->runInBackground();
+            foreach ($absence as $key => $value) {
+                $data = new collectAttendance();
+                $data->uid = 1;
+                $data->user_id = $value;
+                $data->jam_masuk = Carbon::now();
+                $data->jam_keluar = Carbon::now();
+                $data->keterangan_detail = 'Tidak Masuk';
+                $data->keterangan = 'tidak masuk';
+                $data->createdBy = 'System';
+                $data->updatedBy = 'System';
+                $data->save();
+            }
+        })->dailyAt('22:00');
     }
 
     /**

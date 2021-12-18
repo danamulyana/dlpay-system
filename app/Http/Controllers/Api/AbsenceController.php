@@ -51,56 +51,36 @@ class AbsenceController extends BaseController
 
                 $foto = $request->file("foto");
                 $statFoto = '';
+                $workingTime = $cekRfid->shiftcode;
 
-                $workingTime = workingTime::all();
-                foreach ($workingTime as $key => $time) {
-                    // jam masuk
-                    $jammasuk = carbon::parse($time->jam_masuk)->addHours(4);
-                    if (Carbon::now() <= $jammasuk) {
-                        if ($cekRfid->attendance_type == '2') {
-                            if (isset($foto)) {
-                                $imgname = $cekRfid->nama . '_masuk_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
-                                if(in_array($foto->getClientOriginalExtension(), array("jpg", "jpeg", "gif", "png"))){
-                                    $tujuan_upload = 'files/Absensi/' . Carbon::now()->format('Y').'/'.Carbon::now()->format('m');
-                                    $foto->move($tujuan_upload,$imgname);
-                                    $statFoto = "capture foto sukses";
-                                }else{
-                                    $statFoto = "capture foto gagal";
-                                }
-                            }
-                            $namafoto = $tujuan_upload .'/' . $imgname;
-                            $history = HistoryDeviceLog::where('is_attendance',true)->orWhere('user_id',$cekRfid->id)->orderBy('created_at', 'desc')->first();
-                            if ($history == null) {
-                                $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                                return $this->sendMessageAbsence('Absen berhasil',$cekRfid->nama,$statFoto,now());
-                            }
-                            if ($history->uid != $cek_device->uid) {
-                                $timedeff1Hour = carbon::parse($time->jam_masuk)->addHours(1);
-                                if (Carbon::now() > $timedeff1Hour) {
-                                    $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                                    $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','terlambat','telat masuk lebih dari 1 jam','Tazaka Room : ' . $cek_device->uid,$namafoto);
-                                    return $this->sendMessageAbsence('terlambat',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
-                                }
-                                $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                                $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','hadir','masuk tepat waktu','Tazaka Room : ' . $cek_device->uid,$namafoto);
-                                return $this->sendMessageAbsence('terlambat',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
-                            }
+                $jamMasuk = carbon::parse($workingTime->jam_masuk)->addHours(-1);
+                $jamKeluar = carbon::parse($workingTime->jam_keluar);
+
+                // Jam Masuk
+                if (Carbon::now() >= carbon::parse($workingTime->jam_masuk)->addHours(-1)  && Carbon::now() <= carbon::parse($workingTime->jam_masuk)->addHours(4)) 
+                {
+                    // Foto Absen
+                    if (isset($foto)) {
+                        $imgname = $cekRfid->nama . '_masuk_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
+                        if(in_array($foto->getClientOriginalExtension(), array("jpg", "jpeg", "gif", "png"))){
+                            $tujuan_upload = 'files/Absensi/' . Carbon::now()->format('Y').'/'.Carbon::now()->format('m');
+                            $foto->move($tujuan_upload,$imgname);
+                            $statFoto = "capture foto sukses";
+                        }else{
+                            $statFoto = "capture foto gagal";
                         }
-                        $isdata = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today())->first();
-                        if (!$isdata) {
-                            if (isset($foto)) {
-                                $imgname = $cekRfid->nama . '_masuk_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
-                                if(in_array($foto->getClientOriginalExtension(), array("jpg", "jpeg", "gif", "png"))){
-                                    $tujuan_upload = 'files/Absensi/' . Carbon::now()->format('Y').'/'.Carbon::now()->format('m');
-                                    $foto->move($tujuan_upload,$imgname);
-                                    $statFoto = "capture foto sukses";
-                                }else{
-                                    $statFoto = "capture foto gagal";
-                                }
-                            }
-                            $namafoto = $tujuan_upload .'/' . $imgname;
-                            $timedeff1Hour = carbon::parse($time->jam_masuk)->addHours(1);
-                            // Log::channel('Apilog')->info($timedeff1Hour);
+                    }
+                    $namafoto = $tujuan_upload .'/' . $imgname;
+                    // END : Foto Absen
+                    // Absen kalo 2 kali tap
+                    if ($cekRfid->attendance_type == '2') {
+                        $history = HistoryDeviceLog::where('is_attendance',true)->orWhere('user_id',$cekRfid->id)->orderBy('created_at', 'desc')->first();
+                        if ($history == null) {
+                            $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
+                            return $this->sendMessageAbsence('Absen berhasil',$cekRfid->nama,$statFoto,now());
+                        }
+                        if ($history->uid != $cek_device->uid) {
+                            $timedeff1Hour = carbon::parse($workingTime->jam_masuk)->addHours(2);
                             if (Carbon::now() > $timedeff1Hour) {
                                 $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
                                 $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','terlambat','telat masuk lebih dari 1 jam','Tazaka Room : ' . $cek_device->uid,$namafoto);
@@ -108,33 +88,50 @@ class AbsenceController extends BaseController
                             }
                             $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
                             $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','hadir','masuk tepat waktu','Tazaka Room : ' . $cek_device->uid,$namafoto);
+                            return $this->sendMessageAbsence('hadir',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
+                        }
+                    }
+                    // END: Absen Kalo 2 kali tap
+                    $isdata = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today())->first();
+                    if (!$isdata) {
+                        $timedeff1Hour = carbon::parse($workingTime->jam_masuk)->addHours(2);
+                        if (Carbon::now() > $timedeff1Hour) {
+                            $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
+                            $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','terlambat','telat masuk lebih dari 1 jam','Tazaka Room : ' . $cek_device->uid,$namafoto);
                             return $this->sendMessageAbsence('terlambat',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
                         }
                         $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                        return $this->sendErrorAbsence('sudah absen*'.$cekRfid->nama);
+                        $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','hadir','masuk tepat waktu','Tazaka Room : ' . $cek_device->uid,$namafoto);
+                        return $this->sendMessageAbsence('hadir',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
                     }
-                    // jam keluar
-                    if (Carbon::now()->format('H:i') >= $time->jam_keluar ) {
-                        $cek_user = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
-                        if (!is_null($cek_user)) {
-                            if (isset($foto)) {
-                                $imgname = $cekRfid->nama . '_pulang_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
-                                if(in_array($foto->getClientOriginalExtension(), array("jpg", "jpeg", "gif", "png"))){
-                                    $tujuan_upload = 'files/Absensi/' . Carbon::now()->format('Y').'/'.Carbon::now()->format('m');
-                                    $foto->move($tujuan_upload,$imgname);
-                                    $statFoto = "capture foto sukses";
-                                }else{
-                                    $statFoto = "capture foto gagal";
-                                }
-                            }
-                            $namafoto = $tujuan_upload .'/' . $imgname;
-                            $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
-                            $this->updateAttendance($cek_user->id,$cek_device->uid,$namafoto);
-                            return $this->sendMessageAbsence('success',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
-                        }
-                        return $this->sendErrorAbsence("absen masuk tidak di temukan");
-                    }
+                    $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
+                    return $this->sendErrorAbsence('sudah absen*'.$cekRfid->nama);
                 }
+                // END : Jam Masuk
+                // Jam Keluar
+                if (Carbon::now() >= $jamKeluar )
+                {
+                    $cek_user = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->first();
+                    if (!is_null($cek_user)) {
+                        if (isset($foto)) {
+                            $imgname = $cekRfid->nama . '_pulang_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
+                            if(in_array($foto->getClientOriginalExtension(), array("jpg", "jpeg", "gif", "png"))){
+                                $tujuan_upload = 'files/Absensi/' . Carbon::now()->format('Y').'/'.Carbon::now()->format('m');
+                                $foto->move($tujuan_upload,$imgname);
+                                $statFoto = "capture foto sukses";
+                            }else{
+                                $statFoto = "capture foto gagal";
+                            }
+                        }
+                        $namafoto = $tujuan_upload .'/' . $imgname;
+                        $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
+                        $this->updateAttendance($cek_user->id,$cek_device->uid,$namafoto);
+                        return $this->sendMessageAbsence('success',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
+                    }
+                    return $this->sendErrorAbsence("absen masuk tidak di temukan");
+                    $this->SendHistory($cekRfid->id,'attendance not recorded',$cek_device->uid,true);
+                }
+                // END : Jam Keluar
                 return $this->sendErrorAbsence("error waktu operasional");
             }
             return $this->sendErrorAbsence("salah secret key");

@@ -5,6 +5,7 @@
     "/dist/js/ckeditor-balloon.js": "/dist/js/ckeditor-balloon.js",
     "/dist/js/ckeditor-balloon-block.js": "/dist/js/ckeditor-balloon-block.js",
     "/dist/js/ckeditor-document.js": "/dist/js/ckeditor-document.js",
+    "/js/Chart.min.js": "/js/Chart.min.js",
     "/css/app.css": "/css/app.css",
     "/dist/images/200x200.jpg": "/dist/images/200x200.jpg",
     "/dist/images/800x800.jpg": "/dist/images/800x800.jpg",

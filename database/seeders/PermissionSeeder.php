@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
-
+use Spatie\Permission\Models\Role;
 class PermissionSeeder extends Seeder
 {
     /**
@@ -17,54 +17,68 @@ class PermissionSeeder extends Seeder
         $permissions = [
             // Admin Management
             'super_admin',
-            'users_management_access',
-            'users_management_edit',
-            'users_management_add',
-            'users_management_delete',
+            'users_management_access', //sudah
+            'users_management_edit', //sudah
+            'users_management_add', //sudah
+            'users_management_delete', //sudah
             // Master Data
-            'masterData_access',
+            'masterData_access', //sudah
 
             'departement_create',
             'departement_edit',
-            'departement_show',
+            'departement_show', //sudah
             'departement_delete',
             'subdepartement_create',
             'subdepartement_edit',
-            'subdepartement_show',
+            'subdepartement_show', //sudah
             'subdepartement_delete',
             'pegawai_create',
             'pegawai_edit',
-            'pegawai_show',
+            'pegawai_show', //sudah
             'pegawai_delete',
             // Management Device
-            'ManagementDevice_access',
+            'ManagementDevice_access', //sudah
 
             'location_create',
             'location_edit',
-            'location_show',
+            'location_show', //sudah
             'location_delete',
             'attandanceDevice_create',
             'attandanceDevice_edit',
-            'attandanceDevice_show',
+            'attandanceDevice_show',//sudah
             'attandanceDevice_delete',
             'doorlockDevice_create',
             'doorlockDevice_edit',
-            'doorlockDevice_show',
+            'doorlockDevice_show',//sudah
             'doorlockDevice_delete',
             'remark_create',
             'remark_edit',
-            'remark_show',
+            'remark_show',//sudah
             'remark_delete',
 
             // Management Attandance
-            'ManagementAttendance_access',
+            'ManagementAttendance_access', //sudah
 
-            // 
-            'approval_create',
-            'approval_edit',
-            'approval_show',
-            'approval_delete',
-            'approval_access',
+            'workingTime_create',
+            'workingTime_edit',
+            'workingTime_show',
+            'workingTime_delete',
+            'LeaveAndAbsence_create',
+            'LeaveAndAbsence_edit',
+            'LeaveAndAbsence_show',
+            'LeaveAndAbsence_delete',
+
+            // Payroll System
+            'Payroll_access', //sudah
+
+            'weeklyPayroll_access', //sudah
+            'MonthlyPayroll_access', //sudah
+            
+            // Report
+            'report_access', //sudah
+            'DeviceHistoryReport_access', //sudah
+            'AbsenceReport_access', //sudah
+            'DoorlockReport_access', //sudah
         ];
 
         foreach($permissions as $permission) {
@@ -72,5 +86,13 @@ class PermissionSeeder extends Seeder
                 'name' => $permission
             ]);
         };
+
+        $role = Role::create([
+            'name' => 'Admin',
+            'guard_name' => 'web'
+        ]);
+
+        $role->syncPermissions($permissions);
+
     }
 }

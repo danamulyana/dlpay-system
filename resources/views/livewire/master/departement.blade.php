@@ -23,7 +23,7 @@
                 <tbody>
                     @foreach ($departement as $data)
                     <tr class="intro-x" wire:key="{{ $loop->index }}">
-                        <td class="text-center">{{ $loop->index + 1}}</td>
+                        <td class="text-center">{{ $departement->count() * ($departement->currentPage() - 1) + $loop->iteration}}</td>
                         <td class="text-center">{{ $data->nama }}</td>
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">

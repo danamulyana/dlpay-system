@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\captureDoorlockResorce;
 use App\Http\Resources\HistoryResource;
-use App\Models\attendanceDevice;
 use App\Models\doorlockDevices;
-use App\Models\HistoryDeviceLog;
+use App\Models\DoorlockReport;
 use App\Models\memployee;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Storage;
 class device extends BaseController
 {
 
@@ -97,9 +98,10 @@ class device extends BaseController
                         $cekPrivelage = $cekRfid->Doorlock()->get(['uid']);
                         foreach ($cekPrivelage as  $value) {
                             if ($value->uid == $cek_device->uid) {
-                                $history = $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
-                                $withremark = $this->withremarks($cek_device->remarks,$history);
-                                $withLinks = $this->withLinksCounter($history,$cekRfid->user_DoorTime);
+                                $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
+                                $doorlockReport = $this->SendDoorlockReport($cekRfid->id,'Access Granted',$cek_device->uid);
+                                $withremark = $this->withremarks($cek_device->remarks,$doorlockReport);
+                                $withLinks = $this->withLinks($doorlockReport,$cekRfid->user_DoorTime);
                                 return $this->sendMessage('success','Access Granted',$cekRfid->departement->nama,$lock,$cek_device, $cekRfid,$withremark,$withLinks);
                             }
                         }
@@ -112,9 +114,10 @@ class device extends BaseController
 
                 foreach ($cekPrivelage as  $value) {
                     if ($value->uid == $cek_device->uid) {
-                        $history = $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
-                        $withremark = $this->withremarks($cek_device->remarks,$history);
-                        $withLinks = $this->withLinksCounter($history,$cekRfid->user_DoorTime);
+                        $this->SendHistory($cekRfid->id,'Access Granted',$cek_device->uid);
+                        $doorlockReport = $this->SendDoorlockReport($cekRfid->id,'Access Granted',$cek_device->uid);
+                        $withremark = $this->withremarks($cek_device->remarks,$doorlockReport);
+                        $withLinks = $this->withLinks($doorlockReport,$cekRfid->user_DoorTime);
                         return $this->sendMessage('success','Access Granted',$cekRfid->departement->nama,$lock,$cek_device, $cekRfid,$withremark,$withLinks);
                     }
                 }
@@ -134,25 +137,26 @@ class device extends BaseController
             return $this->sendError('Link Expired',401);
         }
 
-        $history = HistoryDeviceLog::find($id);
+        $doorlock = DoorlockReport::find($id);
 
-        if (!$history) {
+        if (!$doorlock) {
             return $this->sendError('Data Not Found');
         }
 
         if (isset($request->key) && isset($request->remark) && isset($request->iddev)) {
             if ($this->key == $request->key) {
-                $cekRemark = doorlockDevices::find($history->uid);
-                $user = memployee::find($history->user_id);
-                if ($request->iddev == $history->uid) {
+                $cekRemark = doorlockDevices::find($doorlock->uid);
+                $user = memployee::find($doorlock->user_id);
+                if ($request->iddev == $doorlock->uid) {
                     foreach ($cekRemark->remarks as $value) {
                         if ($request->remark == $value->id) {
-                            $this->editHistory($id,$value->name);
+                            $this->editRemark($id,$value->name);
                             return $this->sendResponseRemark('success','Access Granted',$user->departement->nama,'open',$cekRemark,$user);
                         }
                     }
                     return $this->sendResponseRemark('failed','No Access',$user->departement->nama,'close',$cekRemark, $user);
                 }
+                return $this->sendError('Doorlock id tidak sama');
             }
             return $this->sendError('salah secret key');
         }
@@ -160,24 +164,59 @@ class device extends BaseController
     }
     public function counter(Request $request, $id)
     {
-        // if (! $request->hasValidSignature()) {
-        //     return $this->sendError('Link Expired',401);
-        // }
+        if (! $request->hasValidSignature()) {
+            return $this->sendError('Link Expired',401);
+        }
 
-        $history = HistoryDeviceLog::find($id);
+        $doorlock = DoorlockReport::find($id);
 
-        if (!$history) {
+        if (!$doorlock) {
             return $this->sendError('Data Not Found');
         }
         if (isset($request->key) && isset($request->count) && isset($request->iddev)) {
             if ($this->key == $request->key) {
-                $door = doorlockDevices::find($history->uid);
-                $user = memployee::find($history->user_id);
-                if ($request->iddev == $history->uid) {
-                    $data = $this->editHistoryCount($id,$request->count);
+                $door = doorlockDevices::find($doorlock->uid);
+                $user = memployee::find($doorlock->user_id);
+                if ($request->iddev == $doorlock->uid) {
+                    $data = $this->editCount($id,$request->count);
 
                     return response()->json(new HistoryResource($data));
                 }
+            }
+            return $this->sendError('salah secret key');
+        }
+        return $this->sendError('salah parameter');
+    }
+    public function capture(Request $request, $id)
+    {
+        // if (! $request->hasValidSignature()) {
+        //     return $this->sendError('Link Expired'. 401);
+        // }
+
+        $doorlock = DoorlockReport::find($id);
+
+        if (!$doorlock) {
+            return $this->sendError('Data Not Found');
+        }
+
+        if (isset($request->key) && isset($request->foto) && isset($request->iddev)) {
+            if ($this->key == $request->key) {
+                $door = doorlockDevices::find($doorlock->uid);
+                $user = memployee::find($doorlock->user_id);
+                $foto = $request->file('foto');
+                $fotoName = "doorlock_access_".$doorlock->id."_".Carbon::now()->format('d-m-Y').".".$foto->getClientOriginalExtension();
+                if ($request->iddev == $doorlock->uid) {
+                    if ($doorlock->doorlock_photo_path == null) {
+                        $uploadFoto = $foto->storeAs('public/doorlock', $fotoName);
+
+                        if ($uploadFoto) {
+                            $data = $this->editCapture($id,'storage/doorlock/'.$fotoName);
+                            return response()->json(new captureDoorlockResorce($data));
+                        }
+                    }
+                    return $this->sendError('Capture Foto Sudah Ada');
+                }
+                return $this->sendError('Doorlock id tidak sama');
             }
             return $this->sendError('salah secret key');
         }
