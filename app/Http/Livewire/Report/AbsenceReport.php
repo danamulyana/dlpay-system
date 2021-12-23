@@ -2,10 +2,13 @@
 
 namespace App\Http\Livewire\Report;
 
+use App\Exports\AbsenceReportExport;
 use App\Http\Controllers\Api\device;
 use App\Models\collectAttendance;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AbsenceReport extends Component
 {
@@ -19,6 +22,28 @@ class AbsenceReport extends Component
     public $confirmingViewModal = false;
 
     public $views = [], $viewName = " ",$viewKaryawan = [], $viewPhotoMasuk, $viewPhotoKeluar;
+
+    public $confirmingExportModal = false;
+    public $startDate, $finishDate;
+
+    public function showmodalExport()
+    {
+        $this->startDate = '';
+        $this->finishDate = '';
+        
+        $this->confirmingExportModal = true;
+    }
+    public function export()
+    {
+        $this->validate([
+            'startDate'=> 'required',
+            'finishDate'=> 'required|after:startDate',
+        ],['finishDate.after' => 'Tanggal Finish Harus Lebih dari Tanggal Start.',]);
+
+        $this->confirmingExportModal = false;
+
+        return Excel::download(new AbsenceReportExport($this->startDate,$this->finishDate), 'AbsenceReport-csp-'.Carbon::now().'.xlsx');
+    }
 
     public function showmodalView($id)
     {

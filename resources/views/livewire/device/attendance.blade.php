@@ -2,7 +2,9 @@
     <h2 class="intro-y text-lg font-medium mt-10">Data Attendance Device</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2 justify-between">
+            @can('attandanceDevice_create')
             <button class="btn btn-primary shadow-md mr-2" wire:click="showmodal">Add Attendance Device</button>
+            @endcan
             <div class="w-full flex sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <select class="w-20 form-select box mt-3 sm:mt-0 mr-5" wire:model="perPage">
                     <option value="10" selected>10</option>
@@ -43,7 +45,16 @@
                                 <i class="las la-arrow-down {{ $sortColumnName === 'location_id' && $sortDirection === 'desc' ? '' : 'text-gray-400' }}"></i>
                             </span>
                         </th>
+                        <th class="text-center whitespace-nowrap cursor-pointer">
+                            MODE
+                            <span wire:click="sortBy('mode')" class="float-right text-sm cursor-pointer">
+                                <i class="las la-arrow-up {{ $sortColumnName === 'mode' && $sortDirection === 'asc' ? '' : 'text-gray-400' }}"></i>
+                                <i class="las la-arrow-down {{ $sortColumnName === 'mode' && $sortDirection === 'desc' ? '' : 'text-gray-400' }}"></i>
+                            </span>
+                        </th>
+                        @if(auth()->user()->can('attandanceDevice_edit') || auth()->user()->can('attandanceDevice_delete'))
                         <th class="text-center whitespace-nowrap cursor-pointer">ACTIONS</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -53,18 +64,25 @@
                         <td class="text-center">{{ $data->id}}</td>
                         <td class="text-center">{{ $data->name }}</td>
                         <td class="text-center">{{ $data->Location->name }}</td>
+                        <td class="text-center">{{ $data->mode }}</td>
+                        @if(auth()->user()->can('attandanceDevice_edit') || auth()->user()->can('attandanceDevice_delete'))
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
+                                @can('attandanceDevice_edit')
                                 <button class="flex items-center mr-3" wire:click="showmodalEdit({{ $data->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square w-4 h-4 mr-1"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg> 
                                     Edit
                                 </button>
+                                @endcan
+                                @can('attandanceDevice_delete')
                                 <button class="flex items-center text-theme-6" wire:click="showmodalDelete({{ $data->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 w-4 h-4 mr-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                     Delete
                                 </button>
+                                @endcan
                             </div>
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -122,6 +140,15 @@
                 </select>
                 <x-jet-input-error for="departement" class="mt-2" />
             </div>
+            <div class="mt-5">
+                <x-jet-label for="mode" value="{{ __('Mode') }}" />
+                <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="mode">
+                    <option value="">--- Select mode ---</option>
+                    <option value="SCAN">SCAN</option>
+                    <option value="ADD">ADD</option>
+                </select>
+                <x-jet-input-error for="mode" class="mt-2" />
+            </div>
         </x-slot>
 
         <x-slot name="footer">
@@ -170,6 +197,14 @@
                     @endforeach
                 </select>
                 <x-jet-input-error for="departement" class="mt-2" />
+            </div>
+            <div class="mt-5">
+                <x-jet-label for="mode" value="{{ __('Mode') }}" />
+                <select class="form-control form-select form-select-sm mt-2 w-3/4" wire:model="data.mode">
+                    <option value="SCAN">SCAN</option>
+                    <option value="ADD">ADD</option>
+                </select>
+                <x-jet-input-error for="mode" class="mt-2" />
             </div>
         </x-slot>
 

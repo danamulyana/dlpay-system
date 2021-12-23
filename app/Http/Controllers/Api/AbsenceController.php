@@ -27,7 +27,32 @@ class AbsenceController extends BaseController
         Log::channel('Apilog')->info($request->key);
         if (isset($request->key) && isset($request->iddev)) {
             if ($this->keyAbsence == $request->key) {
-                echo 'X*SCAN*X';
+                $cek_device = attendanceDevice::where('uid',$request->iddev)->first();
+                if (is_null($cek_device)) {
+                    return $this->sendErrorAbsence('Device tidak terdaftar');
+                }
+                return 'x*'.$cek_device->mode.'*x';
+            }
+            return $this->sendErrorAbsence("salah-secret-key");
+        }
+        return $this->sendErrorAbsence("salah-param");
+    }
+
+    public function addcardrfidcam(Request $request)
+    {
+        if (isset($request->key) && isset($request->iddev) && isset($request->rfid)) {
+            if ($this->keyAbsence == $request->key) {
+                $cek_device = attendanceDevice::where('uid',$request->iddev)->first();
+                $cekRfid = memployee::where('rfid_number',$request->rfid)->first();
+                if (is_null($cek_device)) {
+                    return $this->sendErrorAbsence('Device tidak terdaftar');
+                }
+                if (is_null($cekRfid)) {
+                    $kar =  $this->addKaryawanByRfid($request->rfid);
+                    $this->SendHistory($kar->id,'Menambahkan Rfid',$cek_device->uid,true);
+                    return $this->sendErrorAbsence('Berhasil Menambahkan Rfid');
+                }
+                return $this->sendErrorAbsence('rfid sudah terdaftar');
             }
             return $this->sendErrorAbsence("salah-secret-key");
         }
@@ -53,7 +78,6 @@ class AbsenceController extends BaseController
                 $statFoto = '';
                 $workingTime = $cekRfid->shiftcode;
 
-                $jamMasuk = carbon::parse($workingTime->jam_masuk)->addHours(-1);
                 $jamKeluar = carbon::parse($workingTime->jam_keluar);
 
                 // Jam Masuk
@@ -133,6 +157,7 @@ class AbsenceController extends BaseController
                 }
                 // END : Jam Keluar
                 return $this->sendErrorAbsence("error waktu operasional");
+                $this->SendHistory($cekRfid->id,'error waktu operasional',$cek_device->uid,true);
             }
             return $this->sendErrorAbsence("salah secret key");
         }

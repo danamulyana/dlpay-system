@@ -2,7 +2,10 @@
     <h2 class="intro-y text-lg font-medium mt-10">Data Pegawai</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2 justify-between">
+            @can('pegawai_create')
             <button class="btn btn-primary shadow-md mr-2" wire:click="showmodal">Add Pegawai</button>
+            @endcan
+            <div></div>
             <div class="w-full flex sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <select class="w-20 form-select box mt-3 sm:mt-0 mr-5" wire:model="perPage">
                     <option value="10" selected>10</option>
@@ -61,7 +64,9 @@
                                 <i class="las la-arrow-down {{ $sortColumnName === 'subdepartement_id' && $sortDirection === 'desc' ? '' : 'text-gray-400' }}"></i>
                             </span> --}}
                         </th>
+                        @if(auth()->user()->can('pegawai_edit') || auth()->user()->can('pegawai_delete'))
                         <th class="text-center whitespace-nowrap cursor-pointer">ACTIONS</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -73,18 +78,24 @@
                         <td class="text-center">{{ $data->job_title }}</td>
                         <td class="text-center">{{ $data->departement->nama }}</td>
                         <td class="text-center">{{ $data->subdepartement->nama }}</td>
+                        @if(auth()->user()->can('pegawai_edit') || auth()->user()->can('pegawai_delete'))
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
+                                @can('pegawai_edit')
                                 <button class="flex items-center mr-3" wire:click="showmodalView({{ $data->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square w-4 h-4 mr-1"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg> 
                                     View
                                 </button>
+                                @endcan
+                                @can('pegawai_delete')
                                 <button class="flex items-center text-theme-6" wire:click="showmodalDelete({{ $data->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 w-4 h-4 mr-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                     Delete
                                 </button>
+                                @endcan
                             </div>
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -251,36 +262,36 @@
                     </div> 
                 </div>
                 <div class="mt-5">
-                    <x-jet-label for="data.alamat" value="{{ __('Alamat') }}" />
+                    <x-jet-label for="alamat" value="{{ __('Alamat') }}" />
                     <textarea class="form-control w-3/4"
-                            name="data.alamat" 
-                            x-ref="data.alamat" 
+                            name="alamat" 
+                            x-ref="alamat" 
                             cols="10" rows="10" 
-                            wire:model.defer="data.alamat"
+                            wire:model.defer="alamat"
                             wire:keydown.enter="add" 
                             placeholder="{{ __('Alamat') }}"
                             ></textarea>
-                    <x-jet-input-error for="data.alamat" class="mt-2" />
+                    <x-jet-input-error for="alamat" class="mt-2" />
                 </div>
                 <div class="mt-5">
-                    <x-jet-label for="data.nohp" value="{{ __('No Handphone') }}" />
+                    <x-jet-label for="nohp" value="{{ __('No Handphone') }}" />
                     <x-jet-input type="text" class="mt-1 block w-3/4"
                                     placeholder="{{ __('No Handphone') }}"
-                                    x-ref="data.nohp"
-                                    wire:model.defer="data.nohp"
+                                    x-ref="nohp"
+                                    wire:model.defer="nohp"
                                     wire:keydown.enter="add" />
     
-                    <x-jet-input-error for="data.nohp" class="mt-2" />
+                    <x-jet-input-error for="nohp" class="mt-2" />
                 </div>
                 <div class="mt-5">
-                    <x-jet-label for="data.email" value="{{ __('Email') }}" />
+                    <x-jet-label for="email" value="{{ __('Email') }}" />
                     <x-jet-input type="email" class="mt-1 block w-3/4"
                                     placeholder="{{ __('Email') }}"
-                                    x-ref="data.email"
-                                    wire:model.defer="data.email"
+                                    x-ref="email"
+                                    wire:model.defer="email"
                                     wire:keydown.enter="add" />
     
-                    <x-jet-input-error for="data.email" class="mt-2" />
+                    <x-jet-input-error for="email" class="mt-2" />
                 </div>
                 <div class="mt-5">
                     <x-jet-label for="data.payment_mode" value="{{ __('Pembayaran Gaji') }}" />
@@ -391,7 +402,7 @@
                                                     placeholder="{{ __('Nomor Induk Pegawai') }}"
                                                     x-ref="view.nip"
                                                     wire:model.defer="view.nip"
-                                                    wire:keydown.enter="add"  disabled/>
+                                                    wire:keydown.enter="edit"  disabled/>
                     
                                     <x-jet-input-error for="view.nip" class="mt-2" />
                                 </div>
@@ -401,7 +412,7 @@
                                                     placeholder="{{ __('RFID Number') }}"
                                                     x-ref="view.rfid_number"
                                                     wire:model.defer="view.rfid_number"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.rfid_number" class="mt-2" />
                                 </div>
@@ -411,7 +422,7 @@
                                                     placeholder="{{ __('fingerprint') }}"
                                                     x-ref="view.fingerprint"
                                                     wire:model.defer="view.fingerprint"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.fingerprint" class="mt-2" />
                                 </div>
@@ -421,7 +432,7 @@
                                                     placeholder="{{ __('Nama Pegawai') }}"
                                                     x-ref="view.nama"
                                                     wire:model.defer="view.nama"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.nama" class="mt-2" />
                                 </div>
@@ -431,7 +442,7 @@
                                                     placeholder="{{ __('Job Title') }}"
                                                     x-ref="view.job_title"
                                                     wire:model.defer="view.job_title"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.job_title" class="mt-2" />
                                 </div>
@@ -538,7 +549,7 @@
                                             x-ref="view.alamat" 
                                             cols="10" rows="10" 
                                             wire:model.defer="view.alamat"
-                                            wire:keydown.enter="add" 
+                                            wire:keydown.enter="edit" 
                                             placeholder="{{ __('Alamat') }}"
                                             ></textarea>
                                     <x-jet-input-error for="view.alamat" class="mt-2" />
@@ -549,7 +560,7 @@
                                                     placeholder="{{ __('No Handphone') }}"
                                                     x-ref="view.noHandphone"
                                                     wire:model.defer="view.noHandphone"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.noHandphone" class="mt-2" />
                                 </div>
@@ -559,7 +570,7 @@
                                                     placeholder="{{ __('Email') }}"
                                                     x-ref="view.email"
                                                     wire:model.defer="view.email"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.email" class="mt-2" />
                                 </div>
@@ -578,7 +589,7 @@
                                                     placeholder="{{ __('Rp') }}"
                                                     x-ref="view.basic_salary"
                                                     wire:model="view.basic_salary"
-                                                    wire:keydown.enter="add" 
+                                                    wire:keydown.enter="edit" 
                                                     type-currency="IDR"/>
                     
                                     <x-jet-input-error for="view.basic_salary" class="mt-2" />
@@ -599,7 +610,7 @@
                                                     placeholder="{{ __('Nama Rekening') }}"
                                                     x-ref="view.bank_name"
                                                     wire:model.defer="view.bank_name"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.bank_name" class="mt-2" />
                                 </div>
@@ -619,7 +630,7 @@
                                                     placeholder="{{ __('Nomor Rekening') }}"
                                                     x-ref="view.credited_accont"
                                                     wire:model.defer="view.credited_accont"
-                                                    wire:keydown.enter="add" />
+                                                    wire:keydown.enter="edit" />
                     
                                     <x-jet-input-error for="view.credited_accont" class="mt-2" />
                                 </div>

@@ -5,7 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\collectAttendance;
 use App\Models\DoorlockReport;
+use App\Models\Golongan;
 use App\Models\HistoryDeviceLog;
+use App\Models\mdepartement;
+use App\Models\memployee;
+use App\Models\msubdepartement;
+use App\Models\workingTime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +41,6 @@ class BaseController extends Controller
     {
         $response = [
             "self" => URL::temporarySignedRoute('withcounter', now()->addMinutes($expired),['id' => $link->id]),
-            "related" => URL::temporarySignedRoute('withcapture', now()->addMinutes($expired),['id' => $link->id]),
         ];
         return $response;
     }
@@ -153,6 +157,19 @@ class BaseController extends Controller
         return $data;
     }
 
+    public function responseCapture1($status,$id_log,$deviceId,$expired = 1)
+    {
+        $response = [
+            'status' => $status,
+            'id_log' => $id_log,
+            'id_device' => $deviceId,
+            "links" => [
+                "self" => URL::temporarySignedRoute('withcapture', now()->addMinutes($expired),['id' => $id_log]),
+            ]
+        ];
+        return $response;
+    }
+
     // absence
     public function sendErrorAbsence($errorMessage)
     {
@@ -189,5 +206,31 @@ class BaseController extends Controller
         $data->updatedBy = 'Tazaka Room : ' . $uid;
 
         $data->save();
+    }
+
+    public function addKaryawanByRfid($rfid)
+    {
+        $dep_id = mdepartement::all()->first();
+        $sub_id = msubdepartement::where('departement_id',$dep_id->id)->first();
+        $gol_id = Golongan::all()->first();
+        $shif_id = workingTime::all()->first();
+
+        $data = new memployee();
+        $data->nip = uniqid();
+        $data->attendance_type = rand(1,2);
+        $data->rfid_number = $rfid;
+        $data->nama = '-';
+        $data->job_title = '-';
+        $data->payment_mode = 'weekly';
+        $data->basic_salary = '0';
+        $data->transfer_type = '2';
+        $data->departement_id = $dep_id->id;
+        $data->subdepartement_id = $sub_id->id;
+        $data->golongan_id = $gol_id->id;
+        $data->shiftcode_id = $shif_id->id;
+
+        $data->save();
+
+        return $data;
     }
 }

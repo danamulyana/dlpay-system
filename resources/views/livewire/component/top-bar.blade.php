@@ -73,20 +73,20 @@
         <div class="notification-content pt-2 dropdown-menu">
             <div class="notification-content__box dropdown-menu__content box dark:bg-dark-6">
                 <div class="notification-content__title">Notifications</div>
-                {{-- @foreach (array_slice($fakers, 0, 5) as $key => $faker)
-                    <div class="cursor-pointer relative flex items-center {{ $key ? 'mt-5' : '' }}">
-                        <div class="w-12 h-12 flex-none image-fit mr-1">
-                            <img alt="Rubick Tailwind HTML Admin Template" class="rounded-full" src="{{ asset('dist/images/' . $faker['photos'][0]) }}">
-                            <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
-                        </div>
-                        <div class="ml-2 overflow-hidden">
-                            <div class="flex items-center">
-                                <a href="javascript:;" class="font-medium truncate mr-5">{{ $faker['users'][0]['name'] }}</a>
-                                <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">{{ $faker['times'][0] }}</div>
-                            </div>
-                            <div class="w-full truncate text-gray-600 mt-0.5">{{ $faker['news'][0]['short_content'] }}</div>
-                        </div>
+                <div class="cursor-pointer relative flex items-center mt-5">
+                    <div class="w-12 h-12 flex-none image-fit mr-1">
+                        <img alt="Rubick Tailwind HTML Admin Template" class="rounded-full" src="{{ asset('dist/images/200x200.jpg') }}">
+                        <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                     </div>
+                    <div class="ml-2 overflow-hidden">
+                        <div class="flex items-center">
+                            <a href="javascript:;" class="font-medium truncate mr-5">dana</a>
+                            <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">12:12</div>
+                        </div>
+                        <div class="w-full truncate text-gray-600 mt-0.5">news</div>
+                    </div>
+                </div>
+                {{-- @foreach (array_slice($fakers, 0, 5) as $key => $faker)
                 @endforeach --}}
             </div>
         </div>
@@ -102,7 +102,7 @@
             <div class="dropdown-menu__content box bg-theme-26 dark:bg-dark-6 text-white">
                 <div class="p-4 border-b border-theme-27 dark:border-dark-3">
                     <div class="font-medium">{{ Auth::user()->username }}</div>
-                    {{-- <div class="text-xs text-theme-28 mt-0.5 dark:text-gray-600">{{ $fakers[0]['jobs'][0] }}</div> --}}
+                    <div class="text-xs text-theme-28 mt-0.5 dark:text-gray-600">{{ Auth::user()->roles[0]->name }}</div>
                 </div>
                 <div class="p-2">
                     <a href="{{ route('profile.show') }}" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">

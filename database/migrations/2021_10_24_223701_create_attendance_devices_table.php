@@ -21,6 +21,7 @@ class CreateAttendanceDevicesTable extends Migration
             $table->enum('type',['restricted','public'])->default('public');
             $table->boolean('is_attendance')->default(true);
             $table->foreignId('location_id')->constrained('data_locations')->onDelete('cascade');
+            $table->enum('mode',['SCAN','ADD']);
             $table->string('createdBy')->nullable();
             $table->string('updatedBy')->nullable();
             $table->timestamps();

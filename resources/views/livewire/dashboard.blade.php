@@ -31,7 +31,7 @@
                             <div class="box p-5">
                                 <div class="flex items-center justify-between" style="height: 17vh;">
                                     <div class="">
-                                        <div class="text-3xl font-medium leading-8 mt-6">{{ count($log) }}</div>
+                                        <div class="text-3xl font-medium leading-8 mt-6">{{ $log }}</div>
                                         <div class="text-base text-gray-600 mt-1">employees <br> present today</div>
                                     </div>
                                     <i data-feather="user-check" class="text-theme-9 flex-grow" style="height: 50%; width: 50%;"></i>
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                     </div> --}}
-                    <div class="report-chart">
+                    <div class="Attendance-chart">
                         <canvas id="recapotulation-chart" height="169" class="mt-6"></canvas>
                     </div>
                 </div>
@@ -102,25 +102,25 @@
                     <h3 class="text-lg font-medium truncate mr-5">today's attendance</h3>
                 </div>
                 <div class="intro-y box p-5 mt-5">
-                    <canvas class="mt-3" id="report-donut-chart" height="300"></canvas>
+                    <canvas class="mt-3" id="today-attd-chart" height="300"></canvas>
                     <div class="mt-8">
-                        <div class="flex items-center">
+                        <div class="flex items-center  ">
+                            <div class="w-2 h-2 bg-theme-6 rounded-full mr-3"></div>
+                            <span class="truncate">Tidak Hadir</span>
+                            <div class="h-px flex-1 border border-r border-dashed border-gray-300 mx-3 xl:hidden"></div>
+                            <span class="font-medium xl:ml-auto">{{ $tidakHadirPer }}%</span>
+                        </div>
+                        <div class="flex items-center mt-4">
                             <div class="w-2 h-2 bg-theme-11 rounded-full mr-3"></div>
                             <span class="truncate">Terlambat</span>
                             <div class="h-px flex-1 border border-r border-dashed border-gray-300 mx-3 xl:hidden"></div>
-                            <span class="font-medium xl:ml-auto">62%</span>
+                            <span class="font-medium xl:ml-auto">{{ $terlamabatPer }}%</span>
                         </div>
                         <div class="flex items-center mt-4">
-                            <div class="w-2 h-2 bg-theme-1 rounded-full mr-3"></div>
-                            <span class="truncate">Tidak Hadir</span>
-                            <div class="h-px flex-1 border border-r border-dashed border-gray-300 mx-3 xl:hidden"></div>
-                            <span class="font-medium xl:ml-auto">33%</span>
-                        </div>
-                        <div class="flex items-center mt-4">
-                            <div class="w-2 h-2 bg-theme-12 rounded-full mr-3"></div>
+                            <div class="w-2 h-2 bg-theme-9 rounded-full mr-3"></div>
                             <span class="truncate">Hadir</span>
                             <div class="h-px flex-1 border border-r border-dashed border-gray-300 mx-3 xl:hidden"></div>
-                            <span class="font-medium xl:ml-auto">10%</span>
+                            <span class="font-medium xl:ml-auto">{{ $hadiranPer }}%</span>
                         </div>
                     </div>
                 </div>
@@ -134,105 +134,96 @@
 {{-- <script src="/js/Chart.min.js"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
 <script defer>
-    let ctx = document.getElementById("recapotulation-chart").getContext('2d');
-        let myChart = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: [
-                    "Jan",
-                    "Feb",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    "Aug",
-                    "Sep",
-                    "Oct",
-                    "Nov",
-                    "Dec",
-                ],
-                datasets: [
-                    {
-                        label: "Absence",
-                        data: [
-                            0,
-                            200,
-                            250,
-                            200,
-                            500,
-                            450,
-                            850,
-                            1050,
-                            950,
-                            1100,
-                            900,
-                            1200,
-                        ],
-                        borderWidth: 2,
-                        borderColor: "#3160D8",
-                        backgroundColor: "transparent",
-                        pointBorderColor: "transparent",
-                    },
-                    // {
-                    //     label: "Absence",
-                    //     data: [
-                    //         0,
-                    //         300,
-                    //         400,
-                    //         560,
-                    //         320,
-                    //         600,
-                    //         720,
-                    //         850,
-                    //         690,
-                    //         805,
-                    //         1200,
-                    //         1010,
-                    //     ],
-                    //     borderWidth: 2,
-                    //     borderDash: [2, 2],
-                    //     borderColor: "#a0afbf",
-                    //     backgroundColor: "transparent",
-                    //     pointBorderColor: "transparent",
-                    // },
-                ],
+    let recapotulationctx = document.getElementById("recapotulation-chart").getContext('2d');
+    let recapotulationChart = new Chart(recapotulationctx, {
+        type: "line",
+        data: {
+            labels: @json($month),
+            datasets: [
+                {
+                    label: "Hadir",
+                    data: @json($lineH),
+                    borderWidth: 2,
+                    borderColor: "#3160D8",
+                    backgroundColor: "transparent",
+                },
+                {
+                    label: "terlambat",
+                    data: @json($lineT),
+                    borderWidth: 2,
+                    borderColor: "#FF8B26",
+                    backgroundColor: "transparent",
+                },
+                {
+                    label: "Tidak Masuk",
+                    data: @json($lineTH),
+                    borderWidth: 2,
+                    borderColor: "#D32929",
+                    backgroundColor: "transparent",
+                },
+            ],
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
             },
-            options: {
-                plugins: {
-                    legend: {
+            scales: {
+                x:{
+                    ticks: {
+                        fontSize: "12",
+                        fontColor: "#777777",
+                    },
+                    gridLines: {
                         display: false,
                     },
                 },
-                scales: {
-                    xAxes: [
-                        {
-                            ticks: {
-                                fontSize: "12",
-                                fontColor: "#777777",
-                            },
-                            gridLines: {
-                                display: false,
-                            },
-                        },
-                    ],
-                    yAxes: [
-                        {
-                            ticks: {
-                                fontSize: "12",
-                                fontColor: "#777777",
-                            },
-                            gridLines: {
-                                color: "#D8D8D8",
-                                zeroLineColor: "#D8D8D8",
-                                borderDash: [2, 2],
-                                zeroLineBorderDash: [2, 2],
-                                drawBorder: false,
-                            },
-                        },
-                    ],
+                y:{
+                    ticks: {
+                        fontSize: "12",
+                        fontColor: "#777777",
+                    },
+                    gridLines: {
+                        color: "#D8D8D8",
+                        zeroLineColor: "#D8D8D8",
+                        borderDash: [2, 2],
+                        zeroLineBorderDash: [2, 2],
+                        drawBorder: false,
+                    },
                 },
             },
-        });
+        },
+    });
+
+    console.log(@json($lineH));
+
+    let todayAttdctx = document.getElementById('today-attd-chart').getContext("2d");
+    let todayAttdChart = new Chart(todayAttdctx, {
+        type: "doughnut",
+        data: {
+            labels: [" Tidak hadir", " Terlambat" ," Hadir"],
+            datasets: [
+                {
+                    data: @json($dataTodayChart),
+                    backgroundColor: ["#D32929", "#FF8B26", "#91C714","#285FD3"],
+                    hoverBackgroundColor: ["#D32929", "#FF8B26", "#91C714","#285FD3"],
+                    borderWidth: 5,
+                    borderColor: "#fff",
+                },
+            ],
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: false,
+                }
+            }
+            // cutoutPercentage: 80,
+        },
+    });
     </script>
 @endpush

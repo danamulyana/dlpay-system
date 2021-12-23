@@ -10,16 +10,12 @@
                         <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search"></i>
                     </div>
                 </div>
-                <div class="dropdown ml-auto sm:ml-0 pl-3">
-                    <button class="dropdown-toggle btn px-2 box text-gray-700 dark:text-gray-300" aria-expanded="false">
-                        <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="plus"></i> </span>
+                <div class="ml-auto sm:ml-0 pl-3">
+                    <button class="btn px-2 box text-gray-700 dark:text-gray-300">
+                        <span class="w-5 h-5 flex items-center justify-center" wire:click="showmodalExport"> 
+                            <i class="las la-print"></i>
+                        </span>
                     </button>
-                    <div class="dropdown-menu w-40">
-                        <div class="dropdown-menu__content box dark:bg-dark-1 p-2">
-                            <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"> <i data-feather="file-plus" class="w-4 h-4 mr-2"></i> New Category </a>
-                            <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"> <i data-feather="users" class="w-4 h-4 mr-2"></i> New Group </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -145,6 +141,45 @@
     
             <x-jet-button class="ml-2" wire:click="add" wire:loading.attr="disabled">
                 {{ __('Save') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+    {{-- Export modal --}}
+    <x-jet-dialog-modal wire:model="confirmingExportModal">
+        <x-slot name="title">
+            {{'Export'}}
+        </x-slot>
+
+        <x-slot name="content">
+            <div class="my-4">
+                <x-jet-label for="startDate" value="{{ __('Start') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
+                                x-ref="startDate"
+                                wire:model.defer="startDate"
+                                wire:keydown.enter="export"
+                                max="{{ \Carbon\Carbon::today()->toDateString() }}"
+                                />
+                <x-jet-input-error for="startDate" class="mt-2" />
+            </div>
+            <div class="my-4">
+                <x-jet-label for="finishDate" value="{{ __('Finish') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
+                                x-ref="finishDate"
+                                wire:model.defer="finishDate"
+                                wire:keydown.enter="export"
+                                max="{{ \Carbon\Carbon::today()->toDateString() }}"
+                                />
+                <x-jet-input-error for="finishDate" class="mt-2" />
+            </div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('confirmingExportModal')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2" wire:click="export" wire:loading.attr="disabled">
+                {{ __('Export') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

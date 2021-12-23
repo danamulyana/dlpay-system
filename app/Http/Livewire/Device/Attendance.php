@@ -28,7 +28,7 @@ class Attendance extends Component
     public $id_del, $password;
 
     // add
-    public $location, $name, $uid, $departement;
+    public $location, $name, $uid, $departement,$mode;
 
     // edit
     public $data;
@@ -38,6 +38,7 @@ class Attendance extends Component
         'name' => 'required',
         'location' => 'required',
         'departement' => 'required',
+        'mode' => 'required',
     ];
 
     public function showmodalDelete($id)
@@ -85,6 +86,7 @@ class Attendance extends Component
         $data->name = $this->name;
         $data->location_id = $this->location;
         $data->departement_id = $this->departement;
+        $data->mode = $this->mode;
         $data->createdBy = auth()->user()->username;
         $data->updatedBy = auth()->user()->username;
 
@@ -113,6 +115,7 @@ class Attendance extends Component
         $data->name = $this->data['name'];
         $data->location_id = $this->data['location_id'];
         $data->departement_id = $this->data['departement_id'];
+        $data->mode = $this->data['mode'];
         $data->updatedBy = auth()->user()->username;
 
         $data->save();

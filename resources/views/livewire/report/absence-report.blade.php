@@ -12,6 +12,13 @@
                             <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search"></i>
                         </div>
                     </div>
+                    <div class="ml-auto sm:ml-0 pl-3">
+                        <button class="btn px-2 box text-gray-700 dark:text-gray-300">
+                            <span class="w-5 h-5 flex items-center justify-center" wire:click="showmodalExport"> 
+                                <i class="las la-print"></i>
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <!-- BEGIN: Data List -->
@@ -150,6 +157,45 @@
     
             <x-jet-button class="ml-2" wire:click="add" wire:loading.attr="disabled">
                 {{ __('Save') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+    {{-- Export modal --}}
+    <x-jet-dialog-modal wire:model="confirmingExportModal">
+        <x-slot name="title">
+            {{'Export'}}
+        </x-slot>
+
+        <x-slot name="content">
+            <div class="my-4">
+                <x-jet-label for="startDate" value="{{ __('Start') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
+                                x-ref="startDate"
+                                wire:model.defer="startDate"
+                                wire:keydown.enter="export"
+                                max="{{ \Carbon\Carbon::today()->toDateString() }}"
+                                />
+                <x-jet-input-error for="startDate" class="mt-2" />
+            </div>
+            <div class="my-4">
+                <x-jet-label for="finishDate" value="{{ __('Finish') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
+                                x-ref="finishDate"
+                                wire:model.defer="finishDate"
+                                wire:keydown.enter="export"
+                                max="{{ \Carbon\Carbon::today()->toDateString() }}"
+                                />
+                <x-jet-input-error for="finishDate" class="mt-2" />
+            </div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('confirmingExportModal')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2" wire:click="export" wire:loading.attr="disabled">
+                {{ __('Export') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

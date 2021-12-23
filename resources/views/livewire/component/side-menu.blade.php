@@ -4,8 +4,8 @@
     {{-- @include('../layout/components/mobile-menu') --}}
         <!-- BEGIN: Side Menu -->
         <nav class="side-nav">
-            <a href="" class="intro-x flex items-center justify-center pt-2">
-                <img alt="" class="w-12" src="{{ asset('dist/images/logo-csp-birumerah.gif') }}">
+            <a href="{{ route('dashboard') }}" class="intro-x flex items-center justify-center pt-2">
+                <img alt="logo-csp-birumerah" class="w-12" src="{{ asset('dist/images/logo-csp-birumerah.gif') }}">
             </a>
             <div class="side-nav__devider my-6"></div>
             <ul>
@@ -20,6 +20,7 @@
                     </a>
                 </li>
                 @auth
+                @if(auth()->user()->can('super_admin') || auth()->user()->can('users_management_access'))
                 <li>
                     <a href="javascript:;" class="{{ request()->routeIs('admin.*') ? 'side-menu side-menu--active' : 'side-menu' }}">
                         <div class="side-menu__icon">
@@ -69,6 +70,7 @@
                         @endcan
                     </ul>
                 </li>
+                @endif
                 @can('masterData_access')
                 <li>
                     <a href="javascript:;" class="{{ request()->routeIs('master.*') || request()->routeIs('management users') ? 'side-menu side-menu--active' : 'side-menu' }}">

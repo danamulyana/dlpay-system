@@ -30,10 +30,11 @@ Route::post('/registerdev', [device::class, 'registerdev']);
 Route::post('/access_room', [device::class, 'access_room']);
 Route::post('/remarks/{id}', [device::class, 'remarks'])->name('withremarks');
 Route::post('/counter/{id}', [device::class, 'counter'])->name('withcounter');
+Route::post('/capture',[device::class,'checkCapture'])->name('checkCapture');
 Route::post('/capture/{id}', [device::class, 'capture'])->name('withcapture');
 
 // absence
 Route::get('/datetime', [AbsenceController::class, 'datetime']);
 Route::post('/absensirfidcam', [AbsenceController::class, 'absensi']);
 Route::post('/getmoderfidcam ', [AbsenceController::class, 'getmode']);
-// Route::post('/datetime', [AbsenceController::class, 'datetime']);
+Route::post('/addcardrfidcam ', [AbsenceController::class, 'addcardrfidcam']);

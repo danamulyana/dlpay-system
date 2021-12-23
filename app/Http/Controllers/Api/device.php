@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\captureDoorlockResorce;
 use App\Http\Resources\HistoryResource;
+use App\Models\collectAttendance;
 use App\Models\doorlockDevices;
 use App\Models\DoorlockReport;
 use App\Models\memployee;
@@ -187,11 +188,32 @@ class device extends BaseController
         }
         return $this->sendError('salah parameter');
     }
+
+    public function checkCapture(Request $request)
+    {
+        if (isset($request->key) && isset($request->iddev)) {
+            if ($this->key == $request->key) {
+                $doorlock = DoorlockReport::where('uid',$request->iddev)->latest('created_at')->first();
+
+                if ($doorlock->doorlock_photo_path == null) {
+                    $second = Carbon::parse($doorlock->created_at)->addSeconds(30);
+                    if ($second < Carbon::now()){
+                        return $this->responseCapture1(0,$doorlock->id,$doorlock->uid);
+                    }
+                    return $this->responseCapture1(1,$doorlock->id,$doorlock->uid);
+                }
+                return $this->responseCapture1(0,$doorlock->id,$doorlock->uid);
+            }
+            return $this->sendError('Key Tidak Sesuai');
+        }
+        return $this->sendError('paramater salah');
+    }
+
     public function capture(Request $request, $id)
     {
-        // if (! $request->hasValidSignature()) {
-        //     return $this->sendError('Link Expired'. 401);
-        // }
+        if (! $request->hasValidSignature()) {
+            return $this->sendError('Link Expired');
+        }
 
         $doorlock = DoorlockReport::find($id);
 
@@ -199,24 +221,19 @@ class device extends BaseController
             return $this->sendError('Data Not Found');
         }
 
-        if (isset($request->key) && isset($request->foto) && isset($request->iddev)) {
+        if (isset($request->key) && isset($request->foto)) {
             if ($this->key == $request->key) {
-                $door = doorlockDevices::find($doorlock->uid);
-                $user = memployee::find($doorlock->user_id);
                 $foto = $request->file('foto');
                 $fotoName = "doorlock_access_".$doorlock->id."_".Carbon::now()->format('d-m-Y').".".$foto->getClientOriginalExtension();
-                if ($request->iddev == $doorlock->uid) {
-                    if ($doorlock->doorlock_photo_path == null) {
-                        $uploadFoto = $foto->storeAs('public/doorlock', $fotoName);
+                if ($doorlock->doorlock_photo_path == null) {
+                    $uploadFoto = $foto->storeAs('public/doorlock', $fotoName);
 
-                        if ($uploadFoto) {
-                            $data = $this->editCapture($id,'storage/doorlock/'.$fotoName);
-                            return response()->json(new captureDoorlockResorce($data));
-                        }
+                    if ($uploadFoto) {
+                        $data = $this->editCapture($id,'storage/doorlock/'.$fotoName);
+                        return response()->json(new captureDoorlockResorce($data));
                     }
-                    return $this->sendError('Capture Foto Sudah Ada');
                 }
-                return $this->sendError('Doorlock id tidak sama');
+                return $this->sendError('Capture Foto Sudah Ada');
             }
             return $this->sendError('salah secret key');
         }

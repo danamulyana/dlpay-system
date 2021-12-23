@@ -24,49 +24,49 @@ class PermissionSeeder extends Seeder
             // Master Data
             'masterData_access', //sudah
 
-            'departement_create',
-            'departement_edit',
+            'departement_create', //sudah
+            'departement_edit', //sudah
             'departement_show', //sudah
-            'departement_delete',
-            'subdepartement_create',
-            'subdepartement_edit',
+            'departement_delete', //sudah
+            'subdepartement_create', //sudah
+            'subdepartement_edit', //sudah
             'subdepartement_show', //sudah
-            'subdepartement_delete',
-            'pegawai_create',
-            'pegawai_edit',
+            'subdepartement_delete', //sudah
+            'pegawai_create', //sudah
+            'pegawai_edit', //sudah
             'pegawai_show', //sudah
-            'pegawai_delete',
+            'pegawai_delete', //sudah
             // Management Device
             'ManagementDevice_access', //sudah
 
-            'location_create',
-            'location_edit',
+            'location_create', //sudah
+            'location_edit', //sudah
             'location_show', //sudah
-            'location_delete',
-            'attandanceDevice_create',
-            'attandanceDevice_edit',
+            'location_delete', //sudah
+            'attandanceDevice_create', //sudah
+            'attandanceDevice_edit', //sudah
             'attandanceDevice_show',//sudah
-            'attandanceDevice_delete',
-            'doorlockDevice_create',
-            'doorlockDevice_edit',
+            'attandanceDevice_delete', //sudah
+            'doorlockDevice_create', //sudah
+            'doorlockDevice_edit', //sudah
             'doorlockDevice_show',//sudah
-            'doorlockDevice_delete',
-            'remark_create',
-            'remark_edit',
+            'doorlockDevice_delete', //sudah
+            'remark_create', //sudah
+            'remark_edit', //sudah
             'remark_show',//sudah
-            'remark_delete',
+            'remark_delete', //sudah
 
             // Management Attandance
             'ManagementAttendance_access', //sudah
 
-            'workingTime_create',
-            'workingTime_edit',
+            'workingTime_create', //sudah
+            'workingTime_edit', //sudah
             'workingTime_show',
-            'workingTime_delete',
-            'LeaveAndAbsence_create',
-            'LeaveAndAbsence_edit',
+            'workingTime_delete', //sudah
+            'LeaveAndAbsence_create', //sudah
+            'LeaveAndAbsence_edit',//sudah
             'LeaveAndAbsence_show',
-            'LeaveAndAbsence_delete',
+            'LeaveAndAbsence_delete', //sudah
 
             // Payroll System
             'Payroll_access', //sudah

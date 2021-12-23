@@ -37,7 +37,7 @@ class Employees extends Component
     public $paymentselecttrue = null;
 
     public $data , $fingerprint, $bank_name, $bank_account, $credited_accont, $doorView = [], $deviceData = [];
-
+    public $alamat, $nohp, $email;
     public $view = [];
     public $subview, $depview, $viewtransfer;
 
@@ -122,9 +122,9 @@ class Employees extends Component
         $data->attendance_type = $this->data['attendance_type'];
         $data->nama = $this->data['nama'];
         $data->job_title = $this->data['job'];
-        $data->alamat = $this->data['alamat'];
-        $data->noHandphone = $this->data['nohp'];
-        $data->email = $this->data['email'];
+        $data->alamat = $this->alamat;
+        $data->noHandphone = $this->nohp;
+        $data->email = $this->email;
         $data->payment_mode = $this->data['payment_mode'];
         $data->basic_salary = curremcyIDRToNumeric($this->data['basic_salary']);
         $data->transfer_type = $this->paymentselect;

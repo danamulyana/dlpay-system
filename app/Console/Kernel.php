@@ -53,7 +53,7 @@ class Kernel extends ConsoleKernel
                 $data->updatedBy = 'System';
                 $data->save();
             }
-        })->dailyAt('22:00');
+        })->dailyAt('22:30');
     }
 
     /**

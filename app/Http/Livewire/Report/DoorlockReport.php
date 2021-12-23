@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire\Report;
 
+use App\Exports\DoorlockReportExport;
 use App\Models\DoorlockReport as ModelsDoorlockReport;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DoorlockReport extends Component
 {
@@ -17,6 +20,28 @@ class DoorlockReport extends Component
 
     public $confirmingViewModal = false;
     public $viewName = ' ',$karyawanAccess,$viewPhotoDoorlock;
+
+    public $confirmingExportModal = false;
+    public $startDate, $finishDate;
+
+    public function showmodalExport()
+    {
+        $this->startDate = '';
+        $this->finishDate = '';
+        
+        $this->confirmingExportModal = true;
+    }
+    public function export()
+    {
+        $this->validate([
+            'startDate'=> 'required',
+            'finishDate'=> 'required|after:startDate',
+        ],['finishDate.after' => 'Tanggal Finish Harus Lebih dari Tanggal Start.',]);
+
+        $this->confirmingExportModal = false;
+
+        return Excel::download(new DoorlockReportExport($this->startDate,$this->finishDate), 'DoorlockReport-csp-'.Carbon::now().'.xlsx');
+    }
 
     public function showmodalView($id)
     {

@@ -60,48 +60,47 @@ Route::get('/', Dashboard::class)->name('dashboard');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::prefix('admin')->group(function () {
-        Route::get('permisions', Permisions::class)->name('admin.permisions');
-        Route::get('roles', Roles::class)->name('admin.role');
+        Route::get('permisions', Permisions::class)->middleware('can:super_admin')->name('admin.permisions');
+        Route::get('roles', Roles::class)->middleware('can:super_admin')->name('admin.role');
         Route::get('management-users', ManagementUsers::class)->name('admin.managementusers');
     });
     
     // master Route
     Route::prefix('m')->group(function () {
-        Route::get('departement', Departement::class)->name('master.departement');
-        Route::get('departement/subdepartement', Subdepartement::class)->name('master.subdepartement');
-        Route::get('employees', Employees::class)->name('master.employees');
+        Route::get('departement', Departement::class)->middleware('can:departement_show')->name('master.departement');
+        Route::get('departement/subdepartement', Subdepartement::class)->middleware('can:subdepartement_show')->name('master.subdepartement');
+        Route::get('employees', Employees::class)->middleware('can:pegawai_show')->name('master.employees');
     });
     // Device Route
     Route::prefix('device')->group(function () {
-        Route::get('location', Location::class)->name('device.location');
-        Route::get('attendance', Attendance::class)->name('device.attendance');
-        Route::get('doorlock', Doorlock::class)->name('device.doorlock');
-        Route::get('remarks', Priset::class)->name('device.remark');
+        Route::get('location', Location::class)->middleware('can:location_show')->name('device.location');
+        Route::get('attendance', Attendance::class)->middleware('can:attandanceDevice_show')->name('device.attendance');
+        Route::get('doorlock', Doorlock::class)->middleware('can:doorlockDevice_show')->name('device.doorlock');
+        Route::get('remarks', Priset::class)->middleware('can:remark_show')->name('device.remark');
     });
     // Attendance Route
     Route::prefix('ma')->group(function () {
-        Route::get('working-time', WorkingTime::class)->name('atd.working');
-        Route::get('overtime', Overtime::class)->name('atd.overtime');
-        Route::get('leave-absence', LeaveAndAbsen::class)->name('atd.absence');
+        Route::get('working-time', WorkingTime::class)->middleware('can:workingTime_show')->name('atd.working');
+        Route::get('leave-absence', LeaveAndAbsen::class)->middleware('can:LeaveAndAbsence_show')->name('atd.absence');
     });
     // Payroll Route
     Route::prefix('payroll')->group(function () {
-        Route::get('weekly', Weekly::class)->name('payroll.weekly');
-        Route::get('weekly/{weekly}', WeeklyLists::class)->name('payroll.weekly.list');
-        Route::get('monthly', Monthly::class)->name('payroll.monthly');
-        Route::get('monthly/{month}', MonthLists::class)->name('payroll.monthly.list');
+        Route::get('weekly', Weekly::class)->middleware('can:weeklyPayroll_access')->name('payroll.weekly');
+        Route::get('weekly/{weekly}', WeeklyLists::class)->middleware('can:weeklyPayroll_access')->name('payroll.weekly.list');
+        Route::get('monthly', Monthly::class)->middleware('can:MonthlyPayroll_access')->name('payroll.monthly');
+        Route::get('monthly/{month}', MonthLists::class)->middleware('can:MonthlyPayroll_access')->name('payroll.monthly.list');
     });
 
     Route::prefix('report')->group(function () {
-        Route::get('device-history', DeviceHistory::class)->name('report.device');
-        Route::get('absence', AbsenceReport::class)->name('report.absence');
-        Route::get('doorlock', DoorlockReport::class)->name('report.doorlock');
+        Route::get('device-history', DeviceHistory::class)->middleware('can:DeviceHistoryReport_access')->name('report.device');
+        Route::get('absence', AbsenceReport::class)->middleware('can:AbsenceReport_access')->name('report.absence');
+        Route::get('doorlock', DoorlockReport::class)->middleware('can:DoorlockReport_access')->name('report.doorlock');
     });
 
     Route::prefix('files/downloads')->group(function () {
-        Route::post('weekly-payroll/excel', [FileDownloadController::class,'downloadWeeklyPaymentEXCEL'])->name('weeklyExcelDownload');
-        Route::post('weekly-payroll/csv', [FileDownloadController::class,'downloadWeeklyPaymentCSV'])->name('weeklyCSVDownload');
-        Route::post('monthly-payroll/excel', [FileDownloadController::class,'downloadMonthPaymentEXCEL'])->name('monthlyExcelDownload');
-        Route::post('monthly-payroll/csv', [FileDownloadController::class,'downloadMonthPaymentCSV'])->name('monthlyCSVDownload');
+        Route::post('weekly-payroll/excel', [FileDownloadController::class,'downloadWeeklyPaymentEXCEL'])->middleware('can:weeklyPayroll_access')->name('weeklyExcelDownload');
+        Route::post('weekly-payroll/csv', [FileDownloadController::class,'downloadWeeklyPaymentCSV'])->middleware('can:weeklyPayroll_access')->name('weeklyCSVDownload');
+        Route::post('monthly-payroll/excel', [FileDownloadController::class,'downloadMonthPaymentEXCEL'])->middleware('can:MonthlyPayroll_access')->name('monthlyExcelDownload');
+        Route::post('monthly-payroll/csv', [FileDownloadController::class,'downloadMonthPaymentCSV'])->middleware('can:MonthlyPayroll_access')->name('monthlyCSVDownload');
     });
 });
