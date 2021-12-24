@@ -83,6 +83,25 @@ class AbsenceController extends BaseController
                 // Jam Masuk
                 if (Carbon::now() >= carbon::parse($workingTime->jam_masuk)->addHours(-1)  && Carbon::now() <= carbon::parse($workingTime->jam_masuk)->addHours(4)) 
                 {
+                    // Cek Kemarin Udah Keluar Belum
+                    $isClose = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today()->addDays(-1))->first();
+                    if ($isClose->jam_Keluar == null) {
+                        if (isset($foto)) {
+                            $imgname = $cekRfid->nama . '_pulang_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
+                            if(in_array($foto->getClientOriginalExtension(), array("jpg", "jpeg", "gif", "png"))){
+                                $tujuan_upload = 'files/Absensi/' . Carbon::now()->format('Y').'/'.Carbon::now()->format('m');
+                                $foto->move($tujuan_upload,$imgname);
+                                $statFoto = "capture foto sukses";
+                            }else{
+                                $statFoto = "capture foto gagal";
+                            }
+                        }
+                        $namafoto = $tujuan_upload .'/' . $imgname;
+                        $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
+                        $this->updateAttendance($isClose->id,$cek_device->uid,$namafoto);
+                        return $this->sendMessageAbsence('success',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
+                    }
+
                     // Foto Absen
                     if (isset($foto)) {
                         $imgname = $cekRfid->nama . '_masuk_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
@@ -96,6 +115,7 @@ class AbsenceController extends BaseController
                     }
                     $namafoto = $tujuan_upload .'/' . $imgname;
                     // END : Foto Absen
+
                     // Absen kalo 2 kali tap
                     if ($cekRfid->attendance_type == '2') {
                         $history = HistoryDeviceLog::where('is_attendance',true)->orWhere('user_id',$cekRfid->id)->orderBy('created_at', 'desc')->first();
