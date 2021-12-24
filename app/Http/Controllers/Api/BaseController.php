@@ -10,10 +10,13 @@ use App\Models\HistoryDeviceLog;
 use App\Models\mdepartement;
 use App\Models\memployee;
 use App\Models\msubdepartement;
+use App\Models\User;
 use App\Models\workingTime;
+use App\Notifications\SystemNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
 class BaseController extends Controller
@@ -232,5 +235,15 @@ class BaseController extends Controller
         $data->save();
 
         return $data;
+    }
+
+    // notification
+    public function notifyDB($userData,$data,$system = false)
+    {
+        $users = User::all();
+
+        foreach ($users as $key => $user) {
+            Notification::send($user,new SystemNotification($userData,$data,$system));
+        }
     }
 }

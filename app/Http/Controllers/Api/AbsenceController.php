@@ -108,6 +108,7 @@ class AbsenceController extends BaseController
                             if (Carbon::now() > $timedeff1Hour) {
                                 $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
                                 $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','terlambat','telat masuk lebih dari 1 jam','Tazaka Room : ' . $cek_device->uid,$namafoto);
+                                $this->notifyDB('System ATD','Karyawan NIP: '.$cekRfid->nip.' Terlambat Hadir');
                                 return $this->sendMessageAbsence('terlambat',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
                             }
                             $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
@@ -122,6 +123,7 @@ class AbsenceController extends BaseController
                         if (Carbon::now() > $timedeff1Hour) {
                             $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);
                             $this->sendAttendance($cek_device->uid,$cekRfid->id,'-','terlambat','telat masuk lebih dari 1 jam','Tazaka Room : ' . $cek_device->uid,$namafoto);
+                            $this->notifyDB('System ATD','Karyawan NIP: '.$cekRfid->nip.' Terlambat Hadir');
                             return $this->sendMessageAbsence('terlambat',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
                         }
                         $this->SendHistory($cekRfid->id,'attendance recorded',$cek_device->uid,true);

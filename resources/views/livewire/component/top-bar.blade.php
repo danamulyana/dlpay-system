@@ -66,6 +66,7 @@
     </div> --}}
     <!-- END: Search -->
     <!-- BEGIN: Notifications -->
+    @auth
     <div class="intro-x dropdown mr-auto sm:mr-6">
         <div class="dropdown-toggle notification notification--bullet cursor-pointer" role="button" aria-expanded="false">
             <i data-feather="bell" class="notification__icon dark:text-gray-300"></i>
@@ -73,27 +74,35 @@
         <div class="notification-content pt-2 dropdown-menu">
             <div class="notification-content__box dropdown-menu__content box dark:bg-dark-6">
                 <div class="notification-content__title">Notifications</div>
-                <div class="cursor-pointer relative flex items-center mt-5">
+                @forelse ($notifications as $notify)
+                <div class="cursor-pointer relative flex items-center mt-5" wire:click.prevent="markNotificationAsRead('{{ $notify->id }}')">
                     <div class="w-12 h-12 flex-none image-fit mr-1">
-                        <img alt="Rubick Tailwind HTML Admin Template" class="rounded-full" src="{{ asset('dist/images/200x200.jpg') }}">
+                        <img alt="" class="rounded-full" src="{{ asset('dist/images/200x200.jpg') }}">
                         <div class="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                     </div>
                     <div class="ml-2 overflow-hidden">
                         <div class="flex items-center">
-                            <a href="javascript:;" class="font-medium truncate mr-5">dana</a>
-                            <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">12:12</div>
+                            <a href="" class="font-medium truncate mr-5">{{ $notify->data['user'] }}</a>
+                            <div class="text-xs text-gray-500 ml-auto whitespace-nowrap">[{{ $notify->created_at }}]</div>
                         </div>
-                        <div class="w-full truncate text-gray-600 mt-0.5">news</div>
+                        <div class="w-full text-gray-600 mt-0.5">{{ $notify->data['message'] }}</div>
                     </div>
                 </div>
-                {{-- @foreach (array_slice($fakers, 0, 5) as $key => $faker)
-                @endforeach --}}
+                {{-- @if($loop->last)
+                <div class="text-center my-3">
+                    <a href="#" id="mark-all" wire:click.prevent="markNotificationAsReadAll('{{ notifications }}')">
+                        Mark all as read
+                    </a>
+                </div>
+                @endif --}}
+                @empty
+                <div class="overflow-hidden" >There are no new notifications</div>
+                @endforelse
             </div>
         </div>
     </div>
     <!-- END: Notifications -->
     <!-- BEGIN: Account Menu -->
-    @auth
     <div class="intro-x dropdown w-8 h-8">
         <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in" role="button" aria-expanded="false">
             <img alt="{{ Auth::user()->username }}" src="{{ Auth::user()->profile_photo_path ?  Auth::user()->profile_photo_url : asset('dist/images/200x200.jpg') }}">
