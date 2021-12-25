@@ -28,11 +28,15 @@ class device extends BaseController
         $response = [
             "success" => true,
             "message" => "Welcome To Api Doorlock PT Cahaya Sukses Plastindo",
-            "data" => [],
         ];
 
         return response()->json($response);
     }
+
+    function geterror(){
+        return response()->json(['status' => 'failed', 'ket' => 'Methode GET Tidak tersedia']);
+    }
+
     public function registerdev(Request $request)
     {
         if (isset($request->key) && isset($request->rfid) && isset($request->token)) {

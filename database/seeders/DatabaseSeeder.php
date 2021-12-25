@@ -21,13 +21,13 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(shiftCodeSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(departementSeeder::class);
-        $this->call(subdepartementSeeder::class);
+        // $this->call(departementSeeder::class);
+        // $this->call(subdepartementSeeder::class);
         $this->call(bankdataSeeder::class);
-        $this->call(LocationSeeder::class);
+        // $this->call(LocationSeeder::class);
         // $this->call(AbsenceSeeder::class);
-        $this->call(prisetSeeder::class);
+        // $this->call(prisetSeeder::class);
         $this->call([GolonganSeeder::class]);
-        memployee::factory(20)->create();
+        // memployee::factory(20)->create();
     }
 }

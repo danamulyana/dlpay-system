@@ -80,11 +80,9 @@ class AbsenceController extends BaseController
 
                 $jamKeluar = carbon::parse($workingTime->jam_keluar);
 
-                // Jam Masuk
-                if (Carbon::now() >= carbon::parse($workingTime->jam_masuk)->addHours(-1)  && Carbon::now() <= carbon::parse($workingTime->jam_masuk)->addHours(4)) 
-                {
-                    // Cek Kemarin Udah Keluar Belum
-                    $isClose = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today()->addDays(-1))->first();
+                // Cek Kemarin Udah Keluar Belum
+                $isClose = collectAttendance::where('user_id', $cekRfid->id)->whereDate('created_at', Carbon::today()->addDays(-1))->first();
+                if ($isClose == null) {
                     if ($isClose->jam_Keluar == null) {
                         if (isset($foto)) {
                             $imgname = $cekRfid->nama . '_pulang_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
@@ -101,7 +99,10 @@ class AbsenceController extends BaseController
                         $this->updateAttendance($isClose->id,$cek_device->uid,$namafoto);
                         return $this->sendMessageAbsence('success',$cekRfid->nama,$statFoto,Carbon::now()->format('H-i-s'));
                     }
-
+                }
+                // Jam Masuk
+                if (Carbon::now() >= carbon::parse($workingTime->jam_masuk)->addHours(-1)  && Carbon::now() <= carbon::parse($workingTime->jam_masuk)->addHours(4)) 
+                {
                     // Foto Absen
                     if (isset($foto)) {
                         $imgname = $cekRfid->nama . '_masuk_' . date("dmY_H-i-s_", time()).uniqid(rand(0,5)).'.'. $foto->getClientOriginalExtension();
