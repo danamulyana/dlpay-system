@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/danamulyana/dlpay-system"><img src="public/dist/images/logo.svg" width="80"></a></p>
+<p align="center"><a href="https://github.com/danamulyana/dlpay-system"><img src="public/dist/images/logo-csp-birumerah.gif" width="80"></a></p>
 
 <p align="center">
     <a href="https://github.com/danamulyana"><img alt="GitHub followers" src="https://img.shields.io/github/followers/danamulyana?style=social"></a>
@@ -7,5 +7,7 @@
 </p>
 
 ## About Project
+
+<img src="public/dist/images/dashboard.png">
 
 
