@@ -18,6 +18,8 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="main">
+        <!-- BEGIN: Mobile Menu -->
+        @livewire('component.mobile-menu')
         <div class="flex">
             @livewire('component.side-menu')
             <!-- BEGIN: Content -->

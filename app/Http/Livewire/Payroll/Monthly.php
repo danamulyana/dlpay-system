@@ -46,7 +46,6 @@ class Monthly extends Component
     {
         $this->resetErrorBag();
 
-        // $this->confirmingAddModal = true;
         $this->createPayroll();
     }
 

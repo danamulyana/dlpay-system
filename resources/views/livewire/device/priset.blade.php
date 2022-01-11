@@ -81,12 +81,12 @@
     {{-- add modal --}}
     <x-jet-dialog-modal wire:model="confirmingAddModal">
         <x-slot name="title">
-            {{ 'Add Priset' }}
+            {{ 'Add Remark' }}
         </x-slot>
 
         <x-slot name="content">
             <div class="my-4">
-                <x-jet-label for="name" value="{{ __('Priset') }}" />
+                <x-jet-label for="name" value="{{ __('Remark') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"
                                 placeholder="{{ __('name') }}"
                                 x-ref="name"
@@ -110,12 +110,12 @@
     {{-- Edit Modal --}}
     <x-jet-dialog-modal wire:model="confirmingEditModal">
         <x-slot name="title">
-            {{ 'Edit Priset' }}
+            {{ 'Edit Remark' }}
         </x-slot>
 
         <x-slot name="content">
             <div class="my-4">
-                <x-jet-label for="data.name" value="{{ __('Priset') }}" />
+                <x-jet-label for="data.name" value="{{ __('Remark') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"
                                 placeholder="{{ __('data.name') }}"
                                 x-ref="data.name"
@@ -139,7 +139,7 @@
     {{-- Delete Modal --}}
     <x-jet-dialog-modal wire:model="confirmingDeleteModal">
         <x-slot name="title">
-            {{ 'Delete Priset' }}
+            {{ 'Delete Remark' }}
         </x-slot>
 
         <x-slot name="content">

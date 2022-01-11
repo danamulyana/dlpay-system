@@ -132,7 +132,7 @@
 
 @push('scripts')
 {{-- <script src="/js/Chart.min.js"></script> --}}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
+<script src="{{ asset('js/Chart.min.js') }}"></script>
 <script defer>
     let recapotulationctx = document.getElementById("recapotulation-chart").getContext('2d');
     let recapotulationChart = new Chart(recapotulationctx, {

@@ -312,7 +312,7 @@
     {{-- Delete Modal --}}
     <x-jet-dialog-modal wire:model="confirmingDeleteModal">
         <x-slot name="title">
-            {{ 'Delete Location' }}
+            {{ 'Delete Doorlock Device' }}
         </x-slot>
 
         <x-slot name="content">

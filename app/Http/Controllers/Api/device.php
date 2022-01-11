@@ -195,14 +195,17 @@ class device extends BaseController
             if ($this->key == $request->key) {
                 $doorlock = DoorlockReport::where('uid',$request->iddev)->latest('created_at')->first();
 
-                if ($doorlock->doorlock_photo_path == null) {
-                    $second = Carbon::parse($doorlock->created_at)->addSeconds(30);
-                    if ($second < Carbon::now()){
-                        return $this->responseCapture1(0,$doorlock->id,$doorlock->uid);
+                if ($doorlock) {
+                    if ($doorlock->doorlock_photo_path == null) {
+                        $second = Carbon::parse($doorlock->created_at)->addSeconds(30);
+                        if ($second < Carbon::now()){
+                            return $this->responseCapture1(0,$doorlock->id,$doorlock->uid);
+                        }
+                        return $this->responseCapture1(1,$doorlock->id,$doorlock->uid);
                     }
-                    return $this->responseCapture1(1,$doorlock->id,$doorlock->uid);
+                    return $this->responseCapture1(0,$doorlock->id,$doorlock->uid);
                 }
-                return $this->responseCapture1(0,$doorlock->id,$doorlock->uid);
+                return $this->sendError('belum ada data');
             }
             return $this->sendError('Key Tidak Sesuai');
         }

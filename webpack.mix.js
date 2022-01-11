@@ -18,7 +18,7 @@ mix.js('resources/js/app.js', 'public/js')
     .js("resources/js/ckeditor-balloon.js", "public/dist/js")
     .js("resources/js/ckeditor-balloon-block.js", "public/dist/js")
     .js("resources/js/ckeditor-document.js", "public/dist/js")
-    .js('node_modules/chart.js/dist/Chart.min.js', 'public/js')
+    .js('node_modules/chart.js/dist/chart.min.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .options({
         processCssUrls: false,

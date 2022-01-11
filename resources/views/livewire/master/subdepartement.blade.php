@@ -143,7 +143,7 @@
     {{-- Delete Modal --}}
     <x-jet-dialog-modal wire:model="confirmingDeleteModal">
         <x-slot name="title">
-            {{ 'Delete Departement' }}
+            {{ 'Delete SubDepartement' }}
         </x-slot>
 
         <x-slot name="content">

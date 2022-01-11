@@ -8,7 +8,6 @@
  */
  import "./bootstrap";
  import "./tw-starter";
- import "./chart";
  import "./highlight";
  import "./feather";
  import "./tiny-slider";

@@ -194,7 +194,7 @@
                         <option value="{{ $data->id }}">{{ $data->nama }}</option>
                         @endforeach
                     </select>
-                    <x-jet-input-error for="departement" class="mt-2" />
+                    <x-jet-input-error for="subdepartement" class="mt-2" />
                 </div>
                 @endif
 
@@ -655,7 +655,7 @@
     {{-- Delete Modal --}}
     <x-jet-dialog-modal wire:model="confirmingDeleteModal">
         <x-slot name="title">
-            {{ 'Delete Departement' }}
+            {{ 'Delete Pegawai' }}
         </x-slot>
 
         <x-slot name="content">

@@ -135,12 +135,8 @@
         </x-slot>
     
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$toggle('confirmingViewModal')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-jet-secondary-button>
-    
-            <x-jet-button class="ml-2" wire:click="add" wire:loading.attr="disabled">
-                {{ __('Save') }}
+            <x-jet-button wire:click="$toggle('confirmingViewModal')" wire:loading.attr="disabled">
+                {{ __('Close') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

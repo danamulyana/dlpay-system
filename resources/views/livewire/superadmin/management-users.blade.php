@@ -202,7 +202,7 @@
             </x-jet-secondary-button>
 
             <x-jet-button class="ml-2" wire:click="checkView" wire:loading.attr="disabled">
-                {{ __('Save') }}
+                {{ __('Next') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>
