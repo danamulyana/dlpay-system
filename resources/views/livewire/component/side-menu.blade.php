@@ -186,6 +186,16 @@
                             </a>
                         </li>
                         @endcan
+                        <li>
+                            <a href="{{ route('device.management') }}" class="{{ request()->routeIs('device.management') ? 'side-menu side-menu--active' : 'side-menu' }}">
+                                <div class="side-menu__icon">
+                                    <i data-feather="list"></i>
+                                </div>
+                                <div class="side-menu__title">
+                                    Schadule Management
+                                </div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endcan

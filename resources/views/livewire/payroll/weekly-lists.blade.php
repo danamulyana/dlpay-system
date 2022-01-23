@@ -129,9 +129,11 @@
                                     <button class="flex items-center mr-3" wire:click="showmodalEdit({{ $data->id }})">
                                         <i class="las la-check-square"></i> Edit
                                     </button>
+                                    @can('PayrollApproval_access')
                                     <button class="flex items-center text-theme-20" wire:click="approvall({{ $data->id }})">
                                         <i class="las la-check-circle"></i> Approve
                                     </button>
+                                    @endcan
                                 </div>
                             @else
                                 <div class="flex justify-center items-center">

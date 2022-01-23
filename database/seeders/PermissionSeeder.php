@@ -73,6 +73,7 @@ class PermissionSeeder extends Seeder
 
             'weeklyPayroll_access', //sudah
             'MonthlyPayroll_access', //sudah
+            'PayrollApproval_access',
             
             // Report
             'report_access', //sudah

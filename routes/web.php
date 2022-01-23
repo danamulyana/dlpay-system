@@ -18,6 +18,7 @@ use App\Http\Livewire\Report\DeviceHistory;
 use App\Http\Livewire\Superadmin\ManagementUsers;
 use App\Http\Controllers\FileDownloadController;
 use App\Http\Livewire\Component\Select2;
+use App\Http\Livewire\Device\DoorlockManagement;
 use App\Http\Livewire\Device\Priset;
 use App\Http\Livewire\Master\Golongan;
 use App\Http\Livewire\Report\AbsenceReport;
@@ -77,6 +78,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Route::get('attendance', Attendance::class)->middleware('can:attandanceDevice_show')->name('device.attendance');
         Route::get('doorlock', Doorlock::class)->middleware('can:doorlockDevice_show')->name('device.doorlock');
         Route::get('remarks', Priset::class)->middleware('can:remark_show')->name('device.remark');
+        Route::get('doorlock-management', DoorlockManagement::class)->name('device.management');
     });
     // Attendance Route
     Route::prefix('ma')->group(function () {

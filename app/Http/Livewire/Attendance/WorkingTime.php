@@ -34,7 +34,7 @@ class WorkingTime extends Component
     protected $rules = [
         'nama' => 'required',
         'jam_masuk' => 'required|date_format:H:i',
-        'jam_keluar' => 'required|date_format:H:i|after:jam_masuk',
+        'jam_keluar' => 'required|date_format:H:i',
     ];
 
     protected $messages = [
@@ -90,7 +90,7 @@ class WorkingTime extends Component
         $this->validate([
             'data.shift_name' => 'required',
             'data.jam_masuk' => 'required|date_format:H:i',
-            'data.jam_keluar' => 'required|date_format:H:i|after:data.jam_masuk',
+            'data.jam_keluar' => 'required|date_format:H:i',
         ]);
 
         $data = ModelsWorkingTime::find($this->data['id']);
