@@ -8,6 +8,7 @@ use App\Models\collectAttendance;
 use App\Models\doorlockDevices;
 use App\Models\DoorlockReport;
 use App\Models\memployee;
+use App\Models\Schadule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -93,6 +94,28 @@ class device extends BaseController
                 }
 
                 $lock  = $cek_device->access_mode == 1 ? 'close' : 'open';
+
+                $schadule = $cek_device->schadule()->get();
+
+                if($schadule){
+                    foreach ($schadule as  $value) {
+                        if (Carbon::now() >= carbon::parse($value->tanggal_awal) && carbon::parse($value->tanggal_akhir) <= Carbon::now()){
+                            $cekuser = $cekRfid->schadule()->get();
+                            foreach ($cekuser as $key => $userSchadule) {
+                                if ($userSchadule->pivot->schadules_id == $value->id) {
+                                    $workingTime = $cekRfid->shiftcode;
+                                    if (Carbon::now() >= carbon::parse($workingTime->jam_masuk) && Carbon::now() <= carbon::parse($workingTime->jam_keluar)){
+                                        $this->SendHistory($cekRfid->id,'Access Granted from schedule',$cek_device->uid);
+                                        $doorlockReport = $this->SendDoorlockReport($cekRfid->id,'Access Granted from schedule',$cek_device->uid);
+                                        $withremark = $this->withremarks($cek_device->remarks,$doorlockReport);
+                                        $withLinks = $this->withLinks($doorlockReport,$cekRfid->user_DoorTime);
+                                        return $this->sendMessage('success','Access Granted from schedule',$cekRfid->departement->nama,$lock,$cek_device, $cekRfid,$withremark,$withLinks);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 if ($cek_device->type == 'restricted') {
                     if ($cek_device->departement_id === $cekRfid->departement_id) {

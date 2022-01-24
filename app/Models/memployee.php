@@ -75,4 +75,13 @@ class memployee extends Model
     {
         return $this->belongsTo(workingTime::class,'shiftcode_id');
     }
+    public function schadule() : BelongsToMany
+    {
+        return $this->belongsToMany(
+            Schadule::class,
+            'schadules_meemployes',
+            'memployes_id',
+            'schadules_id',
+        );
+    }
 }

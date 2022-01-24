@@ -32,10 +32,10 @@
                             NAMA
                         </th>
                         <th class="text-center whitespace-nowrap cursor-pointer">
-                            DOORLOCK
+                            Tanggal Awal
                         </th>
                         <th class="text-center whitespace-nowrap cursor-pointer">
-                            KARYAWAN
+                            Tanggal Akhir
                         </th>
                         @if(auth()->user()->can('doorlockDevice_edit') || auth()->user()->can('doorlockDevice_delete'))
                         <th class="text-center whitespace-nowrap cursor-pointer">ACTIONS</th>
@@ -45,12 +45,10 @@
                 <tbody>
                     @foreach ($data as $d)
                     <tr class="intro-x" wire:key="{{ $loop->index }}">
-                        {{-- <td class="text-center">{{ $loop->index + 1}}</td> --}}
-                        <td class="text-center">{{ $d->uid}}</td>
-                        <td class="text-center">{{ $d->name }}</td>
-                        <td class="text-center">{{ $d->Location->name }}</td>
-                        <td class="text-center">{{ $d->type }}</td>
-                        <td class="text-center">{{ $d->access_mode === 0 ? 'Tidak' : 'Ya' }}</td>
+                        <td class="text-center">{{ $loop->index + 1}}</td>
+                        <td class="text-center">{{ $d->nama }}</td>
+                        <td class="text-center">{{ $d->tanggal_awal }}</td>
+                        <td class="text-center">{{ $d->tanggal_akhir}}</td>
                         @if(auth()->user()->can('doorlockDevice_edit') || auth()->user()->can('doorlockDevice_delete'))
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
@@ -88,9 +86,9 @@
 
         <x-slot name="content">
             <div class="my-4">
-                <x-jet-label for="name" value="{{ __('Nama') }}" />
+                <x-jet-label for="name" value="{{ __('Schadule') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"
-                                placeholder="{{ __('nama') }}"
+                                placeholder="{{ __('Schadule') }}"
                                 x-ref="name"
                                 wire:model.defer="name"
                                 wire:keydown.enter="add" />
@@ -98,24 +96,54 @@
                 <x-jet-input-error for="name" class="mt-2" />
             </div>
             <div class="mt-5">
-                <x-jet-label for="tanggalawal" value="{{ __('Type Access') }}" />
-                <x-jet-input type="text" class="mt-1 block w-3/4"
+                <x-jet-label for="tanggalawal" value="{{ __('Tanggal Awal') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
                                 placeholder="{{ __('Tanggal Awal') }}"
                                 x-ref="tanggalawal"
                                 wire:model.defer="tanggalawal"
                                 wire:keydown.enter="add" />
                 <x-jet-input-error for="tanggalawal" class="mt-2" />
             </div>
-
             <div class="mt-5">
-                <x-jet-label for="type" value="{{ __('Tipe Ruangan') }}" />
-                <select class="form-control form-select mt-2 w-3/4" wire:model.defer="type">
-                    <option value=""> --- Select Tipe Ruangan --- </option>
-                    <option value="public">public</option>
-                    <option value="restricted">restricted</option>
-                </select>
-                <x-jet-input-error for="type" class="mt-2" />
+                <x-jet-label for="tanggalakhir" value="{{ __('Tanggal Akhir') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
+                                placeholder="{{ __('Tanggal Akhir') }}"
+                                x-ref="tanggalakhir"
+                                wire:model.defer="tanggalakhir"
+                                wire:keydown.enter="add" />
+                <x-jet-input-error for="tanggalakhir" class="mt-2" />
             </div>
+
+            {{-- Doorlock --}}
+
+            <div class="mt-5" wire:ignore>
+                <x-jet-label for="deviceData" value="{{ __('DoorLock') }}" />
+
+                <x-select2-multiple id="deviceData" wire:model="deviceData">
+                    @foreach ($devices as $device)
+                    <option value="{{ $device->id }}">{{ $device->uid }} | {{ $device->name }}</option>
+                    @endforeach
+                </x-select2-multiple>
+                    
+                <x-jet-input-error for="deviceData" class="mt-2" />
+            </div>
+
+            {{-- END : Doorlock --}}
+            {{-- Karyawan --}}
+
+            <div class="mt-5" wire:ignore>
+                <x-jet-label for="karyawanData" value="{{ __('Karyawan') }}" />
+
+                <x-select2-multiple id="karyawanData" wire:model="karyawanData">
+                    @foreach ($karyawan as $d)
+                    <option value="{{ $d->id }}">{{ $d->nip }} | {{ $d->nama }}</option>
+                    @endforeach
+                </x-select2-multiple>
+                    
+                <x-jet-input-error for="karyawanData" class="mt-2" />
+            </div>
+
+            {{-- END : Karyawan --}}
             
         </x-slot>
 
@@ -130,75 +158,67 @@
         </x-slot>
     </x-jet-dialog-modal>
     {{-- Edit Modal --}}
-    {{-- <x-jet-dialog-modal wire:model="confirmingEditModal">
+    <x-jet-dialog-modal wire:model="confirmingEditModal">
         <x-slot name="title">
-            {{ 'Edit Device Attendance' }}
+            {{ 'Edit Schadule' }}
         </x-slot>
 
         <x-slot name="content">
             <div class="my-4">
-                <x-jet-label for="data.name" value="{{ __('Nama') }}" />
+                <x-jet-label for="dataEdit.nama" value="{{ __('Schadule') }}" />
                 <x-jet-input type="text" class="mt-1 block w-3/4"
-                                placeholder="{{ __('nama Device') }}"
-                                x-ref="data.name"
-                                wire:model.defer="data.name"
+                                placeholder="{{ __('Schadule') }}"
+                                x-ref="dataEdit.nama"
+                                wire:model.defer="dataEdit.nama"
                                 wire:keydown.enter="edit" />
 
-                <x-jet-input-error for="data.name" class="mt-2" />
+                <x-jet-input-error for="dataEdit.nama" class="mt-2" />
             </div>
-            <div class="mt-5">
-                <x-jet-label for="data.location_id" value="{{ __('Nama Location') }}" />
-                <select class="form-control form-select mt-2 w-3/4" wire:model.defer="data.location_id">
-                    <option value=""> --- Select data location --- </option>
-                    @foreach ($locations as $data)
-                    <option value="{{ $data->id }}">{{ $data->name }}</option>
-                    @endforeach
-                </select>
-                <x-jet-input-error for="data.location_id" class="mt-2" />
-            </div>
-            <div class="mt-5">
-                <x-jet-label for="data.access_type" value="{{ __('Type Access') }}" />
-                <select class="form-control form-select mt-2 w-3/4" wire:model="data.access_type">
-                    <option value=""> --- Select data type --- </option>
-                    <option value="in">IN</option>
-                    <option value="out">OUT</option>
-                </select>
-                <x-jet-input-error for="data.access_type" class="mt-2" />
-            </div>
-            <div class="mt-5">
-                <x-jet-label for="type" value="{{ __('Tipe Ruangan') }}" />
-                <select class="form-control form-select mt-2 w-3/4" wire:model.defer="data.type">
-                    <option value=""> --- Select Tipe Ruangan --- </option>
-                    <option value="public">public</option>
-                    <option value="restricted">restricted</option>
-                </select>
-                <x-jet-input-error for="type" class="mt-2" />
-            </div>
-            <div>
-                <div class="mt-3"> 
-                    <label>Remark</label>
-                    <div class="mt-2">
-                        <div class="form-check"> 
-                            <input class="form-check-switch" type="checkbox" wire:model="data.access_mode"> 
-                        </div>
-                    </div>
-                </div>
-    
-                <div>
-                    <div class="mt-5" wire:ignore>
-                        <x-jet-label for="remarkDataEdit" value="{{ __('Remarks') }}" />
+            <div class="my-4">
+                <x-jet-label for="dataEdit.tanggalawal" value="{{ __('Tanggal Awal') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
+                                placeholder="{{ __('Tanggal Awal') }}"
+                                x-ref="dataEdit.tanggalawal"
+                                wire:model.defer="dataEdit.tanggal_awal"
+                                wire:keydown.enter="edit" />
 
-                        <div wire:ignore>
-                            <select id="remarkEdit" class=" select2" multiple="multiple" style="width: 75%;" wire:model="remarkDataEdit">
-                                @foreach ($remarks as $remark)
-                                <option value="{{ $remark->id }}">{{ $remark->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                            
-                        <x-jet-input-error for="remarkDataEdit" class="mt-2" />
-                    </div>
+                <x-jet-input-error for="dataEdit.tanggalawal" class="mt-2" />
+            </div>
+            <div class="my-4">
+                <x-jet-label for="dataEdit.tanggal_akhir" value="{{ __('Tanggal Akhir') }}" />
+                <x-jet-input type="date" class="mt-1 block w-3/4"
+                                placeholder="{{ __('Tanggal Akhir') }}"
+                                x-ref="dataEdit.tanggal_akhir"
+                                wire:model.defer="dataEdit.tanggal_akhir"
+                                wire:keydown.enter="edit" />
+
+                <x-jet-input-error for="dataEdit.tanggal_akhir" class="mt-2" />
+            </div>
+            <div class="mt-5" wire:ignore>
+                <x-jet-label for="doorlockDataEdit" value="{{ __('Doorlock') }}" />
+
+                <div wire:ignore>
+                    <select id="doorlockDataEdit" class=" select2" multiple="multiple" style="width: 75%;" wire:model="doorlockDataEdit">
+                        @foreach ($devices as $device)
+                        <option value="{{ $device->id }}">{{ $device->uid }} | {{ $device->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
+                    
+                <x-jet-input-error for="doorlockDataEdit" class="mt-2" />
+            </div>
+            <div class="mt-5" wire:ignore>
+                <x-jet-label for="karyawanDataEdit" value="{{ __('Doorlock') }}" />
+
+                <div wire:ignore>
+                    <select id="karyawanDataEdit" class=" select2" multiple="multiple" style="width: 75%;" wire:model="karyawanDataEdit">
+                        @foreach ($karyawan as $d)
+                        <option value="{{ $d->id }}">{{ $d->nip }} | {{ $d->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                    
+                <x-jet-input-error for="karyawanDataEdit" class="mt-2" />
             </div>
         </x-slot>
 
@@ -211,9 +231,9 @@
                 {{ __('Save') }}
             </x-jet-button>
         </x-slot>
-    </x-jet-dialog-modal> --}}
+    </x-jet-dialog-modal>
     {{-- Delete Modal --}}
-    {{-- <x-jet-dialog-modal wire:model="confirmingDeleteModal">
+    <x-jet-dialog-modal wire:model="confirmingDeleteModal">
         <x-slot name="title">
             {{ 'Delete Doorlock Device' }}
         </x-slot>
@@ -240,19 +260,28 @@
                 {{ __('Save') }}
             </x-jet-button>
         </x-slot>
-    </x-jet-dialog-modal> --}}
+    </x-jet-dialog-modal>
 </div>
 
 @push('scripts')
     <script>
         document.addEventListener('livewire:load', () => {
-            $('#remarkEdit').select2().on('change', function (e) {
+            $('#doorlockDataEdit').select2().on('change', function (e) {
                 let data = $(this).val();
-                @this.set('remarkDataEdit', data);
+                @this.set('doorlockDataEdit', data);
             });
         })
         Livewire.on('select2modal', () => {
-            $('#remarkEdit').trigger('change');   //the trigerr data selected into modal
+            $('#doorlockDataEdit').trigger('change');   //the trigerr data selected into modal
+        }); 
+        document.addEventListener('livewire:load', () => {
+            $('#karyawanDataEdit').select2().on('change', function (e) {
+                let data = $(this).val();
+                @this.set('karyawanDataEdit', data);
+            });
+        })
+        Livewire.on('select2modal', () => {
+            $('#karyawanDataEdit').trigger('change');   //the trigerr data selected into modal
         }); 
     </script>
 @endpush

@@ -49,4 +49,13 @@ class doorlockDevices extends Model
     {
         return $this->belongsTo(mdepartement::class, 'departement_id');
     }
+    public function schadule() : BelongsToMany
+    {
+        return $this->belongsToMany(
+            Schadule::class,
+            'schadules_doorlock',
+            'doorlock_id',
+            'schadules_id',
+        );
+    }
 }
