@@ -99,7 +99,7 @@ class device extends BaseController
 
                 if($schadule){
                     foreach ($schadule as  $value) {
-                        if (Carbon::now() >= carbon::parse($value->tanggal_awal) && carbon::parse($value->tanggal_akhir) <= Carbon::now()){
+                        if (Carbon::now() >= carbon::parse($value->tanggal_awal) && Carbon::now() <= carbon::parse($value->tanggal_akhir)->addHours(23)->addMinutes(59)->addSeconds(59)){
                             $cekuser = $cekRfid->schadule()->get();
                             foreach ($cekuser as $key => $userSchadule) {
                                 if ($userSchadule->pivot->schadules_id == $value->id) {

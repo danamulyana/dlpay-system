@@ -2,7 +2,7 @@
     <h2 class="intro-y text-lg font-medium mt-10">Doorlock Schadule</h2>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2 justify-between">
-            @can('doorlockDevice_create')
+            @can('schadule_create')
             <button class="btn btn-primary shadow-md mr-2" wire:click="showmodal">Add Schadule</button>
             @endcan
             <div></div>
@@ -37,7 +37,7 @@
                         <th class="text-center whitespace-nowrap cursor-pointer">
                             Tanggal Akhir
                         </th>
-                        @if(auth()->user()->can('doorlockDevice_edit') || auth()->user()->can('doorlockDevice_delete'))
+                        @if(auth()->user()->can('schadule_edit') || auth()->user()->can('schadule_delete'))
                         <th class="text-center whitespace-nowrap cursor-pointer">ACTIONS</th>
                         @endif
                     </tr>
@@ -49,16 +49,16 @@
                         <td class="text-center">{{ $d->nama }}</td>
                         <td class="text-center">{{ $d->tanggal_awal }}</td>
                         <td class="text-center">{{ $d->tanggal_akhir}}</td>
-                        @if(auth()->user()->can('doorlockDevice_edit') || auth()->user()->can('doorlockDevice_delete'))
+                        @if(auth()->user()->can('schadule_edit') || auth()->user()->can('schadule_delete'))
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
-                                @can('doorlockDevice_edit')
+                                @can('schadule_edit')
                                 <button class="flex items-center mr-3" wire:click="showmodalEdit({{ $d->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square w-4 h-4 mr-1"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg> 
                                     Edit
                                 </button>
                                 @endcan
-                                @can('doorlockDevice_delete')
+                                @can('schadule_delete')
                                 <button class="flex items-center text-theme-6" wire:click="showmodalDelete({{ $d->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 w-4 h-4 mr-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                     Delete
@@ -75,7 +75,7 @@
 
         <!-- END: Data List -->
         <!-- BEGIN: Pagination -->
-        {{-- {{ $data->links() }} --}}
+        {{ $data->links() }}
         <!-- END: Pagination -->
     </div>
     {{-- add modal --}}

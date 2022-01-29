@@ -68,12 +68,18 @@ class PermissionSeeder extends Seeder
             'LeaveAndAbsence_show',
             'LeaveAndAbsence_delete', //sudah
 
+            // Management Schadule
+            'schadule_show',
+            'schadule_create', //sudah
+            'schadule_edit', //sudah
+            'schadule_delete', //sudah
+
             // Payroll System
             'Payroll_access', //sudah
 
             'weeklyPayroll_access', //sudah
             'MonthlyPayroll_access', //sudah
-            'PayrollApproval_access',
+            'PayrollApproval_access', //sudah
             
             // Report
             'report_access', //sudah

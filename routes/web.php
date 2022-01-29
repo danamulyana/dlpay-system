@@ -78,7 +78,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Route::get('attendance', Attendance::class)->middleware('can:attandanceDevice_show')->name('device.attendance');
         Route::get('doorlock', Doorlock::class)->middleware('can:doorlockDevice_show')->name('device.doorlock');
         Route::get('remarks', Priset::class)->middleware('can:remark_show')->name('device.remark');
-        Route::get('doorlock-management', DoorlockManagement::class)->name('device.management');
+        Route::get('doorlock-management', DoorlockManagement::class)->middleware('can:schadule_show')->name('device.management');
     });
     // Attendance Route
     Route::prefix('ma')->group(function () {

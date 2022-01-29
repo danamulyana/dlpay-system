@@ -186,6 +186,7 @@
                             </a>
                         </li>
                         @endcan
+                        @can('schadule_show')
                         <li>
                             <a href="{{ route('device.management') }}" class="{{ request()->routeIs('device.management') ? 'side-menu side-menu--active' : 'side-menu' }}">
                                 <div class="side-menu__icon">
@@ -196,6 +197,7 @@
                                 </div>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
                 @endcan
